@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Nurl</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ nurl.id }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ nurl.title }}</td>
+            </tr>
+            <tr>
+                <th>Url</th>
+                <td>{{ nurl.uRL }}</td>
+            </tr>
+            <tr>
+                <th>Notes</th>
+                <td>{{ nurl.notes }}</td>
+            </tr>
+            <tr>
+                <th>Public</th>
+                <td>{% if nurl.public %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Frozen</th>
+                <td>{% if nurl.frozen %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('nurl_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('nurl_edit', { 'id': nurl.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

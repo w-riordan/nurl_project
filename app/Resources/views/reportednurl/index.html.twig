@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Reportednurls list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Accepted</th>
+                <th>Reason</th>
+                <th>Timestamp</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for reportedNurl in reportedNurls %}
+            <tr>
+                <td><a href="{{ path('reportednurl_show', { 'id': reportedNurl.id }) }}">{{ reportedNurl.id }}</a></td>
+                <td>{% if reportedNurl.accepted %}Yes{% else %}No{% endif %}</td>
+                <td>{{ reportedNurl.reason }}</td>
+                <td>{% if reportedNurl.timestamp %}{{ reportedNurl.timestamp|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('reportednurl_show', { 'id': reportedNurl.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('reportednurl_edit', { 'id': reportedNurl.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('reportednurl_new') }}">Create a new reportedNurl</a>
+        </li>
+    </ul>
+{% endblock %}

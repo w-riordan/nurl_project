@@ -1,0 +1,268 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * User
+ *
+ * @ORM\Table(name="user")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
+ */
+class User
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="username", type="string", length=255, unique=true)
+     */
+    private $username;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="userpass", type="string", length=40)
+     */
+    private $userpass;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="profilepic", type="text")
+     */
+    private $profilepic;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="about", type="text")
+     */
+    private $about;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="joindate", type="datetime")
+     */
+    private $joindate;
+
+    /**
+     * @var \stdClass
+     *
+     * @ORM\ManyToOne(targetEntity="UserType", inversedBy="users")
+     * @ORM\JoinColumn(name="usertype", referencedColumnName="id")
+     */
+    private $usertype;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="frozen", type="boolean")
+     */
+    private $frozen;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Nurl", mappedBy="author")
+     */
+    private $nurls;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Collection", mappedBy="owner")
+     */
+    private $collections;
+
+    function __construct()
+    {
+        $this->nurls = new ArrayCollection();
+        $this->collections = new ArrayCollection();
+    }
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set username
+     *
+     * @param string $username
+     *
+     * @return User
+     */
+    public function setUsername($username)
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    /**
+     * Get username
+     *
+     * @return string
+     */
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    /**
+     * Set userpass
+     *
+     * @param string $userpass
+     *
+     * @return User
+     */
+    public function setUserpass($userpass)
+    {
+        $this->userpass = $userpass;
+
+        return $this;
+    }
+
+    /**
+     * Get userpass
+     *
+     * @return string
+     */
+    public function getUserpass()
+    {
+        return $this->userpass;
+    }
+
+    /**
+     * Set profilepic
+     *
+     * @param string $profilepic
+     *
+     * @return User
+     */
+    public function setProfilepic($profilepic)
+    {
+        $this->profilepic = $profilepic;
+
+        return $this;
+    }
+
+    /**
+     * Get profilepic
+     *
+     * @return string
+     */
+    public function getProfilepic()
+    {
+        return $this->profilepic;
+    }
+
+    /**
+     * Set about
+     *
+     * @param string $about
+     *
+     * @return User
+     */
+    public function setAbout($about)
+    {
+        $this->about = $about;
+
+        return $this;
+    }
+
+    /**
+     * Get about
+     *
+     * @return string
+     */
+    public function getAbout()
+    {
+        return $this->about;
+    }
+
+    /**
+     * Set joindate
+     *
+     * @param \DateTime $joindate
+     *
+     * @return User
+     */
+    public function setJoindate($joindate)
+    {
+        $this->joindate = $joindate;
+
+        return $this;
+    }
+
+    /**
+     * Get joindate
+     *
+     * @return \DateTime
+     */
+    public function getJoindate()
+    {
+        return $this->joindate;
+    }
+
+    /**
+     * Set usertype
+     *
+     * @param \stdClass $usertype
+     *
+     * @return User
+     */
+    public function setUsertype($usertype)
+    {
+        $this->usertype = $usertype;
+
+        return $this;
+    }
+
+    /**
+     * Get usertype
+     *
+     * @return \stdClass
+     */
+    public function getUsertype()
+    {
+        return $this->usertype;
+    }
+
+    /**
+     * Set frozen
+     *
+     * @param boolean $frozen
+     *
+     * @return User
+     */
+    public function setFrozen($frozen)
+    {
+        $this->frozen = $frozen;
+
+        return $this;
+    }
+
+    /**
+     * Get frozen
+     *
+     * @return bool
+     */
+    public function getFrozen()
+    {
+        return $this->frozen;
+    }
+}

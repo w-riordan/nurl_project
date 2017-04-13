@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Collections list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for collection in collections %}
+            <tr>
+                <td><a href="{{ path('collection_show', { 'id': collection.id }) }}">{{ collection.id }}</a></td>
+                <td>{{ collection.name }}</td>
+                <td>{{ collection.description }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('collection_show', { 'id': collection.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('collection_edit', { 'id': collection.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('collection_new') }}">Create a new collection</a>
+        </li>
+    </ul>
+{% endblock %}

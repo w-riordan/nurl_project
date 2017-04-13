@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Pendingnurl</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ pendingNurl.id }}</td>
+            </tr>
+            <tr>
+                <th>Accepted</th>
+                <td>{% if pendingNurl.accepted %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Reason</th>
+                <td>{{ pendingNurl.reason }}</td>
+            </tr>
+            <tr>
+                <th>Timestamp</th>
+                <td>{% if pendingNurl.timestamp %}{{ pendingNurl.timestamp|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('pendingnurl_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('pendingnurl_edit', { 'id': pendingNurl.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

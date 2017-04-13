@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Proposedtags list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Rating</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for proposedTag in proposedTags %}
+            <tr>
+                <td><a href="{{ path('proposedtags_show', { 'id': proposedTag.id }) }}">{{ proposedTag.id }}</a></td>
+                <td>{{ proposedTag.name }}</td>
+                <td>{{ proposedTag.rating }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('proposedtags_show', { 'id': proposedTag.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('proposedtags_edit', { 'id': proposedTag.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('proposedtags_new') }}">Create a new proposedTag</a>
+        </li>
+    </ul>
+{% endblock %}

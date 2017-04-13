@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Reportednurl</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ reportedNurl.id }}</td>
+            </tr>
+            <tr>
+                <th>Accepted</th>
+                <td>{% if reportedNurl.accepted %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Reason</th>
+                <td>{{ reportedNurl.reason }}</td>
+            </tr>
+            <tr>
+                <th>Timestamp</th>
+                <td>{% if reportedNurl.timestamp %}{{ reportedNurl.timestamp|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('reportednurl_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('reportednurl_edit', { 'id': reportedNurl.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}
