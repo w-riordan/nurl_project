@@ -40,7 +40,7 @@ class User implements UserInterface, \Serializable
     /**
      * @var string
      *
-     * @ORM\Column(name="profilepic", type="text")
+     * @ORM\Column(name="profilepic", type="text", nullable=true)
      */
     private $profilepic;
 

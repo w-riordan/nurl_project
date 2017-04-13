@@ -9,6 +9,7 @@
 namespace AppBundle\DataFixtures\ORM;
 
 use AppBundle\Entity\User;
+use ClassesWithParents\D;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -67,7 +68,7 @@ class LoadInitialData implements FixtureInterface, ContainerAwareInterface
             ->setAbout($about)
             ->setFrozen(false)
             ->setProfilepic(null)
-            ->setJoindate(date("d/m/Y h:i:sa"))
+            ->setJoindate(new \DateTime())
             ->setUsertype($type);
 
         return $user;
