@@ -1,0 +1,75 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: wayne
+ * Date: 13/04/17
+ * Time: 16:47
+ */
+
+namespace AppBundle\DataFixtures\ORM;
+
+use AppBundle\Entity\User;
+use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use AppBundle\Entity\UserType;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
+class LoadInitialData implements FixtureInterface, ContainerAwareInterface
+{
+    /**
+     * @var ContainerInterface
+     */
+    private $container;
+
+    public function setContainer(ContainerInterface $container = null){
+        $this->container = $container;
+    }
+
+    public function load(ObjectManager $manager)
+    {
+        //Create User Types
+        $standUserType = $this->createUserType("Standard");
+        $modUserType = $this->createUserType("Moderator");
+        $adminUserType = $this->createUserType("Administrator");
+
+        $manager->persist($standUserType);
+        $manager->persist($modUserType);
+        $manager->persist($adminUserType);
+
+        $about = "I am the site admistrator.";
+        $adminUser = $this->createUser("admin","admin",$about,$adminUserType);
+        $about = "I am a moderator.";
+        $modUser = $this->createUser("moderator","password",$about,$modUserType);
+        $about = "I am a standard User.";
+        $stdUser = $this->createUser("user249","password",$about,$standUserType);
+
+        $manager->persist($adminUser);
+        $manager->persist($modUser);
+        $manager->persist($stdUser);
+
+        $manager->flush();
+    }
+
+    public function createUserType($name){
+        $userType = new UserType();
+        $userType->setType($name);
+
+        return $userType;
+    }
+
+    public function createUser($name, $pass, $about,$type){
+        $user = new User();
+        $encoder =$this->container->get("security.password_encoder");
+        $newPass = $encoder->encodePassword($user,$pass);
+        $user->setUsername($name)
+            ->setUserpass($newPass)
+            ->setAbout($about)
+            ->setFrozen(false)
+            ->setProfilepic(null)
+            ->setJoindate(date("d/m/Y h:i:sa"))
+            ->setUsertype($type);
+
+        return $user;
+    }
+}

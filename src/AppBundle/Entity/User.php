@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * User
@@ -11,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  */
-class User
+class User implements UserInterface, \Serializable
 {
     /**
      * @var int
@@ -32,7 +33,7 @@ class User
     /**
      * @var string
      *
-     * @ORM\Column(name="userpass", type="string", length=40)
+     * @ORM\Column(name="userpass", type="string", length=255)
      */
     private $userpass;
 
@@ -134,6 +135,11 @@ class User
         $this->userpass = $userpass;
 
         return $this;
+    }
+
+    public function getPassword()
+    {
+       return $this->$this->getUserpass();
     }
 
     /**
@@ -332,5 +338,49 @@ class User
     public function getCollections()
     {
         return $this->collections;
+    }
+
+    public function eraseCredentials()
+    {
+    }
+
+    public function getRoles()
+    {
+        if ("Administrator" == $this->getUsertype().name ){
+            return array('ROLE_ADMIN');
+        }else if ("Moderator" == $this->getUsertype().name){
+            return array('ROLE_MOD');
+        }else{
+            return array('ROLE_USER');
+        }
+    }
+
+    public function getSalt()
+    {
+        return null;
+    }
+
+    /**
+     * @see \Serializable::serialize()
+     */
+    public function serialize()
+    {
+        return serialize(array(
+            $this->id,
+            $this->username,
+            $this->userpass,
+        ));
+    }
+
+    /**
+     * @see \Serializable::unserialize()
+     */
+    public function unserialize($serialized)
+    {
+        list (
+            $this->id,
+            $this->username,
+            $this->userpass,
+        ) = $this->unserialize($serialized);
     }
 }
