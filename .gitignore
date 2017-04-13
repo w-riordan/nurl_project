@@ -47,6 +47,9 @@
 # Backup entities generated with doctrine:generate:entities command
 */Entity/*~
 
+#ignore idea files
+.idea/
+
 #Default ignore rules that weren't in githubs
 /var/*
 !/var/cache
