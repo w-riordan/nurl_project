@@ -51,6 +51,9 @@ class UserController extends Controller
             $em = $this->getDoctrine()->getManager();
             $userType = $em->getRepository("AppBundle:UserType")->findOneByType("Standard");
             $user->setJoindate(new \DateTime())->setFrozen(false)->setUsertype($userType);
+            $plainPass = $user->getPassword();
+            $pass =  $this->get('security.password_encoder')->encodePassword($user, $plainPass);
+            $user->setPassword($pass);
             $em->persist($user);
             $em->flush();
 
