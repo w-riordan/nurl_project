@@ -26,6 +26,9 @@
                 </li>
             {% else %}
                 <li>
+                    <a href="{{ path('user_new') }}">Register</a>
+                </li>
+                <li>
                 <form class="login_form" action="{{ path('login') }}" method="post">
                     <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
                     <input type="text" id="username" name="_username" placeholder="Username">

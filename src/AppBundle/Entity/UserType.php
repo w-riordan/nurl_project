@@ -87,6 +87,12 @@ class UserType
         return $this;
     }
 
+
+    function __toString()
+    {
+        return $this->getType();
+    }
+
     /**
      * Remove user
      *

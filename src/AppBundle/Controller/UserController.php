@@ -39,8 +39,9 @@ class UserController extends Controller
      */
     public function newAction(Request $request)
     {
+
         if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')){
-            $this->redirectToRoute('homepage');
+            return $this->redirectToRoute('homepage');
         }
         $user = new User();
         $form = $this->createForm('AppBundle\Form\UserType', $user);
@@ -48,6 +49,8 @@ class UserController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $userType = $em->getRepository("AppBundle:UserType")->findOneByType("Standard");
+            $user->setJoindate(new \DateTime())->setFrozen(false)->setUsertype($userType);
             $em->persist($user);
             $em->flush();
 

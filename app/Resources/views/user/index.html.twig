@@ -8,7 +8,7 @@
             <tr>
                 <th>Id</th>
                 <th>Username</th>
-                <th>Userpass</th>
+                <th>Password</th>
                 <th>Profilepic</th>
                 <th>About</th>
                 <th>Joindate</th>
@@ -21,7 +21,7 @@
             <tr>
                 <td><a href="{{ path('user_show', { 'id': user.id }) }}">{{ user.id }}</a></td>
                 <td>{{ user.username }}</td>
-                <td>{{ user.userpass }}</td>
+                <td>{{ user.password }}</td>
                 <td>{{ user.profilepic }}</td>
                 <td>{{ user.about }}</td>
                 <td>{% if user.joindate %}{{ user.joindate|date('Y-m-d H:i:s') }}{% endif %}</td>
