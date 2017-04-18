@@ -33,9 +33,9 @@ class User implements UserInterface, \Serializable
     /**
      * @var string
      *
-     * @ORM\Column(name="userpass", type="string", length=255)
+     * @ORM\Column(name="password", type="string", length=255)
      */
-    private $userpass;
+    private $password;
 
     /**
      * @var string
@@ -124,33 +124,13 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * Set userpass
-     *
-     * @param string $userpass
-     *
-     * @return User
-     */
-    public function setUserpass($userpass)
-    {
-        $this->userpass = $userpass;
-
-        return $this;
-    }
-
-    public function getPassword()
-    {
-       return $this->$this->getUserpass();
-    }
-
-    /**
-     * Get userpass
-     *
      * @return string
      */
-    public function getUserpass()
+    public function getPassword()
     {
-        return $this->userpass;
+        return $this->password;
     }
+
 
     /**
      * Set profilepic
@@ -346,13 +326,7 @@ class User implements UserInterface, \Serializable
 
     public function getRoles()
     {
-        if ("Administrator" == $this->getUsertype().name ){
-            return array('ROLE_ADMIN');
-        }else if ("Moderator" == $this->getUsertype().name){
-            return array('ROLE_MOD');
-        }else{
-            return array('ROLE_USER');
-        }
+       return array('ROLE_USER');
     }
 
     public function getSalt()
@@ -368,7 +342,7 @@ class User implements UserInterface, \Serializable
         return serialize(array(
             $this->id,
             $this->username,
-            $this->userpass,
+            $this->password,
         ));
     }
 
@@ -380,7 +354,21 @@ class User implements UserInterface, \Serializable
         list (
             $this->id,
             $this->username,
-            $this->userpass,
+            $this->password,
         ) = $this->unserialize($serialized);
+    }
+
+    /**
+     * Set password
+     *
+     * @param string $password
+     *
+     * @return User
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+
+        return $this;
     }
 }

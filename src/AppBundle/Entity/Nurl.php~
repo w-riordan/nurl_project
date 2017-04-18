@@ -209,5 +209,76 @@ class Nurl
     {
         return $this->frozen;
     }
-}
 
+    /**
+     * Set tag
+     *
+     * @param \AppBundle\Entity\Tag $tag
+     *
+     * @return Nurl
+     */
+    public function setTag(\AppBundle\Entity\Tag $tag = null)
+    {
+        $this->tag = $tag;
+
+        return $this;
+    }
+
+    /**
+     * Get tag
+     *
+     * @return \AppBundle\Entity\Tag
+     */
+    public function getTag()
+    {
+        return $this->tag;
+    }
+
+    /**
+     * Set author
+     *
+     * @param \AppBundle\Entity\User $author
+     *
+     * @return Nurl
+     */
+    public function setAuthor(\AppBundle\Entity\User $author = null)
+    {
+        $this->author = $author;
+
+        return $this;
+    }
+
+    /**
+     * Get author
+     *
+     * @return \AppBundle\Entity\User
+     */
+    public function getAuthor()
+    {
+        return $this->author;
+    }
+
+    /**
+     * Set collection
+     *
+     * @param \AppBundle\Entity\Collection $collection
+     *
+     * @return Nurl
+     */
+    public function setCollection(\AppBundle\Entity\Collection $collection = null)
+    {
+        $this->collection = $collection;
+
+        return $this;
+    }
+
+    /**
+     * Get collection
+     *
+     * @return \AppBundle\Entity\Collection
+     */
+    public function getCollection()
+    {
+        return $this->collection;
+    }
+}

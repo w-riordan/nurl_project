@@ -113,5 +113,62 @@ class Collection
     {
         return $this->description;
     }
-}
 
+    /**
+     * Set owner
+     *
+     * @param \AppBundle\Entity\User $owner
+     *
+     * @return Collection
+     */
+    public function setOwner(\AppBundle\Entity\User $owner = null)
+    {
+        $this->owner = $owner;
+
+        return $this;
+    }
+
+    /**
+     * Get owner
+     *
+     * @return \AppBundle\Entity\User
+     */
+    public function getOwner()
+    {
+        return $this->owner;
+    }
+
+    /**
+     * Add nurl
+     *
+     * @param \AppBundle\Entity\Nurl $nurl
+     *
+     * @return Collection
+     */
+    public function addNurl(\AppBundle\Entity\Nurl $nurl)
+    {
+        $this->nurls[] = $nurl;
+
+        return $this;
+    }
+
+    /**
+     * Remove nurl
+     *
+     * @param \AppBundle\Entity\Nurl $nurl
+     */
+    public function removeNurl(\AppBundle\Entity\Nurl $nurl)
+    {
+        $this->nurls->removeElement($nurl);
+    }
+
+    /**
+     * Get nurls
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getNurls()
+    {
+        return $this->nurls;
+    }
+}

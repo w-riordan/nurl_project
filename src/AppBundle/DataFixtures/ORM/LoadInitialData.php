@@ -64,7 +64,7 @@ class LoadInitialData implements FixtureInterface, ContainerAwareInterface
         $encoder =$this->container->get("security.password_encoder");
         $newPass = $encoder->encodePassword($user,$pass);
         $user->setUsername($name)
-            ->setUserpass($newPass)
+            ->setPassword($newPass)
             ->setAbout($about)
             ->setFrozen(false)
             ->setProfilepic(null)

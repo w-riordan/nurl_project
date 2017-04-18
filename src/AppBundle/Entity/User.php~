@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * User
@@ -11,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  */
-class User
+class User implements UserInterface, \Serializable
 {
     /**
      * @var int
@@ -32,14 +33,14 @@ class User
     /**
      * @var string
      *
-     * @ORM\Column(name="userpass", type="string", length=40)
+     * @ORM\Column(name="password", type="string", length=255)
      */
-    private $userpass;
+    private $password;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="profilepic", type="text")
+     * @ORM\Column(name="profilepic", type="text", nullable=true)
      */
     private $profilepic;
 
@@ -123,28 +124,13 @@ class User
     }
 
     /**
-     * Set userpass
-     *
-     * @param string $userpass
-     *
-     * @return User
-     */
-    public function setUserpass($userpass)
-    {
-        $this->userpass = $userpass;
-
-        return $this;
-    }
-
-    /**
-     * Get userpass
-     *
      * @return string
      */
-    public function getUserpass()
+    public function getPassword()
     {
-        return $this->userpass;
+        return $this->password;
     }
+
 
     /**
      * Set profilepic
@@ -264,5 +250,111 @@ class User
     public function getFrozen()
     {
         return $this->frozen;
+    }
+
+    /**
+     * Add nurl
+     *
+     * @param \AppBundle\Entity\Nurl $nurl
+     *
+     * @return User
+     */
+    public function addNurl(\AppBundle\Entity\Nurl $nurl)
+    {
+        $this->nurls[] = $nurl;
+
+        return $this;
+    }
+
+    /**
+     * Remove nurl
+     *
+     * @param \AppBundle\Entity\Nurl $nurl
+     */
+    public function removeNurl(\AppBundle\Entity\Nurl $nurl)
+    {
+        $this->nurls->removeElement($nurl);
+    }
+
+    /**
+     * Get nurls
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getNurls()
+    {
+        return $this->nurls;
+    }
+
+    /**
+     * Add collection
+     *
+     * @param \AppBundle\Entity\Collection $collection
+     *
+     * @return User
+     */
+    public function addCollection(\AppBundle\Entity\Collection $collection)
+    {
+        $this->collections[] = $collection;
+
+        return $this;
+    }
+
+    /**
+     * Remove collection
+     *
+     * @param \AppBundle\Entity\Collection $collection
+     */
+    public function removeCollection(\AppBundle\Entity\Collection $collection)
+    {
+        $this->collections->removeElement($collection);
+    }
+
+    /**
+     * Get collections
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCollections()
+    {
+        return $this->collections;
+    }
+
+    public function eraseCredentials()
+    {
+    }
+
+    public function getRoles()
+    {
+       return array('ROLE_USER');
+    }
+
+    public function getSalt()
+    {
+        return null;
+    }
+
+    /**
+     * @see \Serializable::serialize()
+     */
+    public function serialize()
+    {
+        return serialize(array(
+            $this->id,
+            $this->username,
+            $this->userpass,
+        ));
+    }
+
+    /**
+     * @see \Serializable::unserialize()
+     */
+    public function unserialize($serialized)
+    {
+        list (
+            $this->id,
+            $this->username,
+            $this->userpass,
+        ) = $this->unserialize($serialized);
     }
 }

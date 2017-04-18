@@ -131,5 +131,28 @@ class ReportedNurl
     {
         return $this->timestamp;
     }
-}
 
+    /**
+     * Set nurl
+     *
+     * @param \AppBundle\Entity\Nurl $nurl
+     *
+     * @return ReportedNurl
+     */
+    public function setNurl(\AppBundle\Entity\Nurl $nurl = null)
+    {
+        $this->nurl = $nurl;
+
+        return $this;
+    }
+
+    /**
+     * Get nurl
+     *
+     * @return \AppBundle\Entity\Nurl
+     */
+    public function getNurl()
+    {
+        return $this->nurl;
+    }
+}
