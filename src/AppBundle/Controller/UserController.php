@@ -39,6 +39,9 @@ class UserController extends Controller
      */
     public function newAction(Request $request)
     {
+        if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')){
+            $this->redirectToRoute('homepage');
+        }
         $user = new User();
         $form = $this->createForm('AppBundle\Form\UserType', $user);
         $form->handleRequest($request);
