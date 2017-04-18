@@ -3,11 +3,41 @@
     <head>
         <meta charset="UTF-8" />
         <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        <style>
+            @import "/css/main.css";
+            {% block stylesheets %}{% endblock %}
+        </style>
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
     <body>
+        <header>
+            <h1>NURL</h1>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="{{ path('homepage') }}">Homepage</a></li>
+
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                <li>
+                    <a href="{{ path('logout') }}">Logout</a>
+                </li>
+                <li class="right_align">
+                    Logged in as {{ app.user.username }}
+                </li>
+            {% else %}
+                <li>
+                <form class="login_form" action="{{ path('login') }}" method="post">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                    <input type="text" id="username" name="_username" placeholder="Username">
+                    <input type="password" id="password" name="_password" placeholder="Password">
+                    <button type="submit">Login</button>
+                </form>
+                </li>
+            {% endif %}
+            </ul>
+        </nav>
         {% block body %}{% endblock %}
+        <footer></footer>
         {% block javascripts %}{% endblock %}
     </body>
 </html>

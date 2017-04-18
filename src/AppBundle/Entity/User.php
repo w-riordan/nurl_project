@@ -326,7 +326,12 @@ class User implements UserInterface, \Serializable
 
     public function getRoles()
     {
-       return array('ROLE_USER');
+        if ($this->usertype->getType() == "Moderator"){
+            return array('ROLE_USER','ROLE_MOD');
+        }else if ($this->usertype->getType() == "Administrator"){
+            return array('ROLE_USER','ROLE_MOD','ROLE_ADMIN');
+        }
+        return array('ROLE_USER');
     }
 
     public function getSalt()
