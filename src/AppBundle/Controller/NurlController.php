@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Nurl;
+use AppBundle\Entity\PendingNurl;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
@@ -45,10 +46,28 @@ class NurlController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($nurl);
-            $em->flush();
 
-            return $this->redirectToRoute('nurl_show', array('id' => $nurl->getId()));
+            if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')){
+                $nurl->setFrozen(false)->setAuthor($this->get('security.token_storage')->getToken()->getUser());
+
+                $em->persist($nurl);
+                $em->flush();
+
+                return $this->redirectToRoute('nurl_show', array('id' => $nurl->getId()));
+            }else{
+                $anonUser = $em->getRepository("AppBundle:User")->findOneByUsername("Anonymous");
+                $nurl->setPublic(true)->setFrozen(true)->setAuthor($anonUser);
+                $pendingNurl = new PendingNurl();
+                $pendingNurl->setNurl($nurl)->setAccepted(null)->setReason(null)->setTimestamp(null);
+
+                $em->persist($nurl);
+                $em->persist($pendingNurl);
+                $em->flush();
+
+                return $this->redirectToRoute("homepage");
+            }
+
+
         }
 
         return $this->render('nurl/new.html.twig', array(

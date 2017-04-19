@@ -40,6 +40,8 @@ class LoadInitialData implements FixtureInterface, ContainerAwareInterface
         $manager->persist($adminUserType);
 
         //Create Users
+        $about = "This user represents all unregistered users";
+        $anonUser = $this->createUser("Anonymous","thisusershouldnotbeloggedin",$about,$standUserType);
         $about = "I am the site admistrator.";
         $adminUser = $this->createUser("admin","admin",$about,$adminUserType);
         $about = "I am a moderator.";
@@ -47,6 +49,7 @@ class LoadInitialData implements FixtureInterface, ContainerAwareInterface
         $about = "I am a standard User.";
         $stdUser = $this->createUser("user249","password",$about,$standUserType);
 
+        $manager->persist($anonUser);
         $manager->persist($adminUser);
         $manager->persist($modUser);
         $manager->persist($stdUser);
