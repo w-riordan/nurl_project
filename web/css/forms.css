@@ -32,3 +32,8 @@ form div textarea{
 form div.hidden{
     display: none;
 }
+
+form input.submit{
+    margin-left: 8rem;
+    width: 5rem;
+}

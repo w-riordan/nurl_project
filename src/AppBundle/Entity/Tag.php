@@ -140,4 +140,9 @@ class Tag
     {
         return $this->nurls;
     }
+
+    function __toString()
+    {
+        return $this->name;
+    }
 }

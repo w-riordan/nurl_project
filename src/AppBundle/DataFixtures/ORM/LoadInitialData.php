@@ -8,6 +8,7 @@
 
 namespace AppBundle\DataFixtures\ORM;
 
+use AppBundle\Entity\Tag;
 use AppBundle\Entity\User;
 use ClassesWithParents\D;
 use Doctrine\Common\DataFixtures\FixtureInterface;
@@ -38,6 +39,7 @@ class LoadInitialData implements FixtureInterface, ContainerAwareInterface
         $manager->persist($modUserType);
         $manager->persist($adminUserType);
 
+        //Create Users
         $about = "I am the site admistrator.";
         $adminUser = $this->createUser("admin","admin",$about,$adminUserType);
         $about = "I am a moderator.";
@@ -48,6 +50,16 @@ class LoadInitialData implements FixtureInterface, ContainerAwareInterface
         $manager->persist($adminUser);
         $manager->persist($modUser);
         $manager->persist($stdUser);
+
+        //Create Initial Tags
+        $webTag = $this->createTag("Web Dev", 1500);
+        $javaTag = $this->createTag("Java Dev", 1000);
+        $gameTag = $this->createTag("Game Dev", 2200);
+
+        $manager->persist($webTag);
+        $manager->persist($javaTag);
+        $manager->persist($gameTag);
+
 
         $manager->flush();
     }
@@ -72,5 +84,11 @@ class LoadInitialData implements FixtureInterface, ContainerAwareInterface
             ->setUsertype($type);
 
         return $user;
+    }
+
+    public function createTag($name, $rating){
+        $tag = new Tag();
+        $tag->setName($name)->setRating($rating);
+        return $tag;
     }
 }
