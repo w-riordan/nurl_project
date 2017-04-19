@@ -13,7 +13,7 @@ class NurlType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('title')->add('uRL')->add('notes')->add('public')->add('frozen')->add('tag')->add('author')->add('collection');
+        $builder->add('title')->add('uRL')->add('notes')->add('public')->add('tag')->add('collection');
     }
     
     /**

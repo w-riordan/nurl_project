@@ -5,6 +5,7 @@
         <title>{% block title %}Welcome!{% endblock %}</title>
         <style>
             @import "/css/main.css";
+            @import "/css/forms.css";
             {% block stylesheets %}{% endblock %}
         </style>
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
@@ -16,7 +17,8 @@
         <nav>
             <ul>
                 <li><a href="{{ path('homepage') }}">Homepage</a></li>
-
+                <li><a href="{{ path('nurl_index') }}">Nurls</a></li>
+                <li><a href="{{ path('tag_index') }}">Tags</a></li>
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                 <li>
                     <a href="{{ path('logout') }}">Logout</a>
@@ -28,7 +30,7 @@
                 <li>
                     <a href="{{ path('user_new') }}">Register</a>
                 </li>
-                <li>
+                <li class="login_form">
                 <form class="login_form" action="{{ path('login') }}" method="post">
                     <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
                     <input type="text" id="username" name="_username" placeholder="Username">
