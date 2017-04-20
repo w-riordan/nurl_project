@@ -25,9 +25,10 @@ class TagController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $tags = $em->getRepository('AppBundle:Tag')->findAll();
+        $proposedTags = $em->getRepository('AppBundle:ProposedTags')->findAll();
 
         return $this->render('tag/index.html.twig', array(
-            'tags' => $tags,
+            'tags' => $tags, 'proposedTags' => $proposedTags
         ));
     }
 

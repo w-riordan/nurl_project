@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}Welcome!{% endblock %} - NURL</title>
         <style>
             @import "/css/main.css";
             @import "/css/forms.css";
@@ -41,7 +41,9 @@
             {% endif %}
             </ul>
         </nav>
+        <main>
         {% block body %}{% endblock %}
+        </main>
         <footer></footer>
         {% block javascripts %}{% endblock %}
     </body>

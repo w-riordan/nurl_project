@@ -8,6 +8,7 @@
 
 namespace AppBundle\DataFixtures\ORM;
 
+use AppBundle\Entity\ProposedTags;
 use AppBundle\Entity\Tag;
 use AppBundle\Entity\User;
 use ClassesWithParents\D;
@@ -63,6 +64,14 @@ class LoadInitialData implements FixtureInterface, ContainerAwareInterface
         $manager->persist($javaTag);
         $manager->persist($gameTag);
 
+        //Create Proposed Tags
+        $webFrameTag = $this->createProposedTag("Web Framework Dev",10);
+        $androidDevTag = $this->createProposedTag("Android Dev",25);
+        $funnyVidsTag = $this->createProposedTag("Funny Vids",-10);
+
+        $manager->persist($webFrameTag);
+        $manager->persist($androidDevTag);
+        $manager->persist($funnyVidsTag);
 
         $manager->flush();
     }
@@ -91,6 +100,12 @@ class LoadInitialData implements FixtureInterface, ContainerAwareInterface
 
     public function createTag($name, $rating){
         $tag = new Tag();
+        $tag->setName($name)->setRating($rating);
+        return $tag;
+    }
+
+    public function createProposedTag($name, $rating){
+        $tag = new ProposedTags();
         $tag->setName($name)->setRating($rating);
         return $tag;
     }

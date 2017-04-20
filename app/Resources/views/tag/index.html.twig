@@ -1,41 +1,39 @@
 {% extends 'base.html.twig' %}
-
+{% block title %} Tags {% endblock %}
 {% block body %}
-    <h1>Tags list</h1>
+    <h1>Current Tags</h1>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Rating</th>
-                <th>Name</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for tag in tags %}
-            <tr>
-                <td><a href="{{ path('tag_show', { 'id': tag.id }) }}">{{ tag.id }}</a></td>
-                <td>{{ tag.rating }}</td>
-                <td>{{ tag.name }}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('tag_show', { 'id': tag.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('tag_edit', { 'id': tag.id }) }}">edit</a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="flex_container">
+        {% if tags %}
+            {% for tag in tags %}
+                <div class="tag">
+                <h2><a href="{{ path('tag_show', {'id':tag.id}) }}"> {{ tag.name }} </a></h2>
+                </div>
+            {% endfor %}
+        {% else %}
+        <p class="tag">Their are currently no tags to display</p>
+        {% endif %}
+    </div>
 
-    <ul>
-        <li>
-            <a href="{{ path('tag_new') }}">Create a new tag</a>
-        </li>
-    </ul>
+    <h1>Proposed Tags</h1>
+
+    <div class="flex_container">
+        {% if proposedTags %}
+            {% for tag in proposedTags %}
+                <div class="tag">
+                    <h2><a href="{{ path('proposedtags_show', {'id':tag.id}) }}"> {{ tag.name }} </a></h2>
+                    <div class="vote_box">
+
+                        <p {% if tag.rating < 0 %} class="red" {% else %} class="green" {% endif %}>
+                            <a href="{{ path('vote_up', {'id':tag.id}) }}"><img src="/images/vote_up.png"></a>
+                            {{ tag.rating }}
+                            <a href="{{ path('vote_down', {'id':tag.id}) }}"><img src="/images/vote_down.png"></a>
+                        </p>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="tag">Their are currently no proposed tags to display</p>
+        {% endif %}
+    </div>
 {% endblock %}

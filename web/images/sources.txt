@@ -1,1 +1,3 @@
 profile pics - https://pixabay.com/get/e831b40e2ff21c22d2524518a33219c8b66ae3d110b3174896f2c878/user-145176_1280.png
+vote_up.png - https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Green_Arrow_Up.svg/240px-Green_Arrow_Up.svg.png
+vote_down.png - https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Red_Arrow_Down.svg/240px-Red_Arrow_Down.svg.png

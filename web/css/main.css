@@ -6,6 +6,7 @@ body{
     width: 80%;
     min-width: 800px;
     margin: auto;
+    font-size: 1.6rem;
 }
 
 header h1{
@@ -65,6 +66,65 @@ nav .login_form{
 }
 
 .login_form button{
-    width: 6rem;
+    width: 5rem;
+    margin-right: 0.5rem;
     display: inline-block;
+}
+
+main, header{
+    background-color: lightgoldenrodyellow;
+    border: solid darkgoldenrod;
+    padding: 1rem;
+}
+
+.flex_container{
+    display: flex;
+}
+
+.tag{
+    flex: 1;
+    text-align: center;
+    background-color: darkgoldenrod;
+    margin: .5rem;
+}
+
+.tag a{
+    display: block;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+}
+
+.tag a:hover, .tag:hover{
+    background-color: darkkhaki;
+}
+
+.red{
+    color: red;
+}
+
+.green{
+    color: green;
+}
+
+.tag .vote_box{
+    font-weight: 900;
+    background-color: khaki;
+    margin: auto;
+
+}
+
+.tag .vote_box img{
+    max-width: 1rem;
+    max-height: 1rem;
+}
+
+.tag .vote_box img:hover{
+    max-width: 1.3rem;
+    max-height: 1.3rem;
+}
+
+.tag .vote_box a, .tag .vote_box a {
+    display: inline-block;
+    background-color: khaki;
 }

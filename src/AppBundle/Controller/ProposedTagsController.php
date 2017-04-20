@@ -32,6 +32,42 @@ class ProposedTagsController extends Controller
     }
 
     /**
+     * Increases the rating on a proposed Tag
+     * @Route("/vote_up/{id}", name="vote_up")
+     */
+    public function voteUpAction(ProposedTags $tag){
+        $rating = $tag->getRating();
+        if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')){
+            $tag->setRating($rating+5);
+        }else{
+            $tag->setRating($rating+1);
+        }
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($tag);
+        $em->flush();
+
+        return $this->redirectToRoute('proposedtags_show',array('id' => $tag->getId()));
+    }
+
+    /**
+     * Increases the rating on a proposed Tag
+     * @Route("/vote_down/{id}",name="vote_down")
+     */
+    public function voteDownAction(ProposedTags $tag){
+        $rating = $tag->getRating();
+        if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')){
+            $tag->setRating($rating-5);
+        }else{
+            $tag->setRating($rating-1);
+        }
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($tag);
+        $em->flush();
+
+        return $this->redirectToRoute('proposedtags_show',array('id' => $tag->getId()));
+    }
+
+    /**
      * Creates a new proposedTag entity.
      *
      * @Route("/new", name="proposedtags_new")
