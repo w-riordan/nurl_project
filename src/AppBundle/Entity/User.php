@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * User
@@ -40,7 +41,8 @@ class User implements UserInterface, \Serializable
     /**
      * @var string
      *
-     * @ORM\Column(name="profilepic", type="text", nullable=true)
+     * @ORM\Column(name="profilepic", type="string", nullable=true)
+     * @Assert\File(mimeTypes={ "image/png", "image/jpeg", "image/gif" })
      */
     private $profilepic;
 

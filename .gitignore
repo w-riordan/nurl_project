@@ -50,6 +50,9 @@
 #ignore idea files
 .idea/
 
+#ignore uploaded images
+/web/images/uploads/
+
 #Default ignore rules that weren't in githubs
 /var/*
 !/var/cache

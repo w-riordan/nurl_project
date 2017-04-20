@@ -54,6 +54,13 @@ class UserController extends Controller
             $plainPass = $user->getPassword();
             $pass =  $this->get('security.password_encoder')->encodePassword($user, $plainPass);
             $user->setPassword($pass);
+
+            $profilepic = $user->getProfilepic();
+            $filename = md5(uniqid()).'.'.$profilepic->guessExtension();
+
+            $profilepic->move($this->getParameter('profile_pics_dir'), $filename);
+            $user->setProfilepic($filename);
+
             $em->persist($user);
             $em->flush();
 
