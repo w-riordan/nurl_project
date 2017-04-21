@@ -93,6 +93,7 @@ main, header{
     text-decoration: none;
     color: white;
     font-weight: bold;
+    font-variant: small-caps;
 }
 
 .tag a:hover, .tag:hover{
@@ -127,4 +128,26 @@ main, header{
 .tag .vote_box a, .tag .vote_box a {
     display: inline-block;
     background-color: khaki;
+}
+
+.warning_message{
+    display: block;
+    padding: 2rem 2rem;
+    margin: 1rem;
+    background-color: lightsalmon;
+    color: crimson;
+}
+.block_link{
+    display: inline-block;
+    color: lightgoldenrodyellow;
+    text-decoration: none;
+    padding: 1rem;
+    background-color: darkgoldenrod;
+    font-variant: small-caps;
+    font-weight: bold;
+    margin-bottom: 2rem;
+}
+
+.block_link:hover{
+    background-color: darkkhaki;
 }

@@ -1,8 +1,13 @@
 {% extends 'base.html.twig' %}
-
+{% block title %} New Nurl {% endblock %}
 {% block body %}
-    <h1>Nurl NEw</h1>
-
+    <h1>Create New Nurl</h1>
+    {% if  not(is_granted('IS_AUTHENTICATED_FULLY')) %}
+        <p class="warning_message">
+            Your are not logged in, so your nurl will only be posted upoon aproval by a moderator.
+            To post a nurl now, <a href="{{ path('user_new') }}"> sign up </a> or <a href="{{ path('login') }}"> log in.</a>
+        </p>
+    {% endif %}
     {{ form_start(form) }}
 
         {{ form_row(form.title) }}
@@ -18,7 +23,7 @@
         {% endif %}
         {{ form_row(form.uRL) }}
         {{ form_row(form.notes) }}
-        <input class="submit" type="submit" value="Create" />
+        <input class="submit" type="submit" value="Propose" />
     {{ form_end(form) }}
 
 {% endblock %}

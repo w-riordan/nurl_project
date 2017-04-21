@@ -75,7 +75,8 @@ class ProposedTagsController extends Controller
      */
     public function newAction(Request $request)
     {
-        $proposedTag = new Proposedtag();
+        $proposedTag = new ProposedTags();
+        $proposedTag->setRating(0);
         $form = $this->createForm('AppBundle\Form\ProposedTagsType', $proposedTag);
         $form->handleRequest($request);
 
