@@ -25,7 +25,7 @@ class NurlController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $nurls = $em->getRepository('AppBundle:Nurl')->findAll();
+        $nurls = $em->getRepository('AppBundle:Nurl')->findByFrozen(false,array('id'=>'desc'));
 
         return $this->render('nurl/index.html.twig', array(
             'nurls' => $nurls,

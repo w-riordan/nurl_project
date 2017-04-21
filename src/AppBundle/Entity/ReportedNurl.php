@@ -31,7 +31,7 @@ class ReportedNurl
     /**
      * @var string
      *
-     * @ORM\Column(name="reason", type="text", nullable=true)
+     * @ORM\Column(name="reason", type="text")
      */
     private $reason;
 

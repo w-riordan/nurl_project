@@ -2,10 +2,12 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Nurl;
 use AppBundle\Entity\ReportedNurl;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * Reportednurl controller.
@@ -34,21 +36,26 @@ class ReportedNurlController extends Controller
     /**
      * Creates a new reportedNurl entity.
      *
-     * @Route("/new", name="reportednurl_new")
+     * @Route("/report/{id}", name="reportednurl_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+    public function newAction(Request $request, Nurl $nurl)
     {
         $reportedNurl = new Reportednurl();
+        $reportedNurl->setNurl($nurl);
         $form = $this->createForm('AppBundle\Form\ReportedNurlType', $reportedNurl);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $reportedNurl->setTimestamp(new \DateTime());
+            $nurl = $reportedNurl->getNurl();
+            $nurl->setFrozen(true);
             $em->persist($reportedNurl);
+            $em->persist($nurl);
             $em->flush();
-
-            return $this->redirectToRoute('reportednurl_show', array('id' => $reportedNurl->getId()));
+            $this->addFlash("notify","The following nurl was succefully reported : ".$nurl->getTitle());
+            return $this->redirectToRoute('homepage');
         }
 
         return $this->render('reportednurl/new.html.twig', array(

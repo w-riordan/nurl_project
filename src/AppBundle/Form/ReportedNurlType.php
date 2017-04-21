@@ -13,7 +13,7 @@ class ReportedNurlType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('accepted')->add('reason')->add('timestamp')->add('nurl');
+        $builder->add('reason');
     }
     
     /**

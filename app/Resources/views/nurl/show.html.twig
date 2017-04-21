@@ -1,48 +1,30 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Nurl</h1>
+    <div class="nurl_div">
+        <h1>Title</h1>
+        <h1 class="nurl_content">{{ nurl.title }}</h1>
+    </div>
 
-    <table>
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ nurl.id }}</td>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td>{{ nurl.title }}</td>
-            </tr>
-            <tr>
-                <th>Url</th>
-                <td>{{ nurl.uRL }}</td>
-            </tr>
-            <tr>
-                <th>Notes</th>
-                <td>{{ nurl.notes }}</td>
-            </tr>
-            <tr>
-                <th>Public</th>
-                <td>{% if nurl.public %}Yes{% else %}No{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Frozen</th>
-                <td>{% if nurl.frozen %}Yes{% else %}No{% endif %}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <ul>
-        <li>
-            <a href="{{ path('nurl_index') }}">Back to the list</a>
-        </li>
-        <li>
-            <a href="{{ path('nurl_edit', { 'id': nurl.id }) }}">Edit</a>
-        </li>
-        <li>
+    <div class="nurl_div">
+        <h2>Author</h2>
+        <a class="block_link" href="{{ path('user_show', {'id':nurl.author.id}) }}">{{ nurl.author.getProfileImage() | raw }} {{ nurl.author.username }}</a>
+    </div>
+    <div  class="nurl_div">
+        <h2>Link</h2>
+        <a class="block_link" href="http://{{ nurl.uRL }}">URL</a>
+    </div>
+    <div class="nurl_div">
+        <h2>Notes</h2>
+        <p class="nurl_content text_back" >{{ nurl.notes }}</p>
+    </div>
+    <a class="block_link" href="{{ path('reportednurl_new', {'id':nurl.id}) }}">Report</a>
+        {% if is_granted('ROLE_ADMIN') or (is_granted('IS_AUTHENTICATED_FULLY') and app.user == nurl.author)%}
+            <a class ="block_link" href="{{ path('nurl_edit', { 'id': nurl.id }) }}">Edit</a>
             {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
+            <input class="block_link no_button" type="submit" value="Delete">
             {{ form_end(delete_form) }}
-        </li>
+        {% endif %}
+    <a class="block_link" href="{{ path('nurl_index') }}">Back to the list</a>
     </ul>
 {% endblock %}

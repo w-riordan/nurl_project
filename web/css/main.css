@@ -179,3 +179,48 @@ main, header{
     max-width: 2rem;
     max-height: 2rem;
 }
+.nurl_div{
+    display: flex;
+}
+
+.nurl_div h1, .nurl_div h2{
+    width: 15rem;
+}
+
+.nurl_div h1:first-child:after, .nurl_div h2:after{
+    content: ':';
+}
+
+
+.text_back{
+    background-color: lightcyan;
+}
+
+.nurl_content{
+    display: block;
+}
+
+.nurl_summary{
+    display: flex;
+    padding: 0;
+    border: solid darkgoldenrod;
+}
+
+.nurl_summary a{
+    flex: 1;
+    min-width: 10rem;
+    margin: 0;
+}
+
+.nurl_summary div{
+    max-width: 60rem;
+    flex: 1;
+    text-align: center;
+}
+
+.nurl_summary p{
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow:ellipsis ;
+}

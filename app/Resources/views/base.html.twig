@@ -43,6 +43,9 @@
         </nav>
         <main>
             <div id="content">
+                {% for message in app.session.flashbag.get('notify') %}
+                    <p class="warning_message">{{ message }}</p>
+                {% endfor %}
                 {% block body %}{% endblock %}
             </div>
         </main>
