@@ -4,9 +4,17 @@ html{
 
 body{
     width: 80%;
-    min-width: 800px;
+    min-width: 80rem;
     margin: auto;
     font-size: 1.6rem;
+}
+
+#content{
+    width: 80%;
+    min-width: 64rem;
+    margin: 2rem auto;
+    background-color: #FFFFFF;
+    padding: 2rem 5rem;
 }
 
 header h1{
@@ -27,9 +35,9 @@ nav ul{
 }
 nav li{
     flex: 1;
-    display: block;
+    display: flex;
+    width: 100%;
     min-height: 2.5rem;
-    min-width: 20rem;
     background-color: darkgoldenrod;
     text-align: center;
     font-variant: small-caps;
@@ -42,9 +50,11 @@ nav a{
     text-decoration: none;
     display: block;
     color: lightgoldenrodyellow;
-    min-height: 2.5rem;
+    width: 100%;
     padding: 0;
     margin: 0;
+    border-left: solid darkgoldenrod;
+    border-right: solid darkgoldenrod;
 }
 
 nav a:hover{
@@ -54,8 +64,8 @@ nav a:hover{
 nav .login_form{
     text-align: right;
     height: 2.5rem;
-    min-width: 25rem;
     padding: 0;
+    min-width: 25rem;
     margin: 0;
 }
 
@@ -79,6 +89,7 @@ main, header{
 
 .flex_container{
     display: flex;
+    flex-wrap: wrap;
 }
 
 .tag{
@@ -86,6 +97,12 @@ main, header{
     text-align: center;
     background-color: darkgoldenrod;
     margin: .5rem;
+    max-height: 10rem;
+    min-width: 27rem;
+}
+
+.tag h2{
+    max-height: 3rem;
 }
 
 .tag a{
@@ -150,4 +167,15 @@ main, header{
 
 .block_link:hover{
     background-color: darkkhaki;
+}
+
+.profile_pic{
+    display: inline-block;
+    vertical-align: middle;
+    padding: 0.5rem;
+}
+
+.small_pic{
+    max-width: 2rem;
+    max-height: 2rem;
 }

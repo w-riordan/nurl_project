@@ -378,4 +378,15 @@ class User implements UserInterface, \Serializable
 
         return $this;
     }
+
+    public function getProfileImage( $size = 'small'){
+        $imageUrl = "";
+        if ($this->profilepic == null){
+            $imageUrl = "/images/". strtolower($this->usertype->getType()).".png";
+        }else{
+            $imageUrl = "/images/uploads/".$this->profilepic;
+        }
+
+        return "<img src='$imageUrl' class='profile_pic ". $size ."_pic'>";
+    }
 }

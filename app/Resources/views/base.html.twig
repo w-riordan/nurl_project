@@ -23,8 +23,8 @@
                 <li>
                     <a href="{{ path('logout') }}">Logout</a>
                 </li>
-                <li class="right_align">
-                    Logged in as {{ app.user.username }}
+                <li>
+                   <a href="{{ path('user_show', {'id': app.user.id}) }}">{{ app.user.getProfileImage() | raw }} {{ app.user.username }}</a>
                 </li>
             {% else %}
                 <li>
@@ -42,7 +42,9 @@
             </ul>
         </nav>
         <main>
-        {% block body %}{% endblock %}
+            <div id="content">
+                {% block body %}{% endblock %}
+            </div>
         </main>
         <footer></footer>
         {% block javascripts %}{% endblock %}
