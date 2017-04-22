@@ -13,6 +13,7 @@
         {{ form_row(form.title) }}
         {{ form_row(form.tag) }}
         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            <p class="warning_message">WARNING: Public NURLS can't be changed to private later.</p>
             {{ form_row(form.public, { 'attr': {'class': 'checkbox'} }) }}
             {{ form_row(form.collection) }}
         {% else %}
@@ -23,7 +24,7 @@
         {% endif %}
         {{ form_row(form.uRL) }}
         {{ form_row(form.notes) }}
-        <input class="submit" type="submit" value="Propose" />
+        <input class="submit" type="submit" value="Create" />
     {{ form_end(form) }}
 
 {% endblock %}
