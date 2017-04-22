@@ -49,9 +49,16 @@ class User implements UserInterface, \Serializable
     /**
      * @var string
      *
-     * @ORM\Column(name="about", type="text")
+     * @ORM\Column(name="about", type="text", nullable=true)
      */
     private $about;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="public", type="boolean")
+     */
+    private $profilepublic;
 
     /**
      * @var \DateTime
@@ -388,5 +395,23 @@ class User implements UserInterface, \Serializable
         }
 
         return "<img src='$imageUrl' class='profile_pic ". $size ."_pic'>";
+    }
+
+    /**
+     * @return string
+     */
+    public function getProfilepublic()
+    {
+        return $this->profilepublic;
+    }
+
+    /**
+     * @param string $profilepublic
+     */
+    public function setProfilepublic($profilepublic)
+    {
+        $this->profilepublic = $profilepublic;
+
+        return $this;
     }
 }

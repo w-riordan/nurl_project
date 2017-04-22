@@ -5,7 +5,9 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * User controller.
@@ -46,6 +48,7 @@ class UserController extends Controller
         $user = new User();
         $form = $this->createForm('AppBundle\Form\UserType', $user);
         $form->handleRequest($request);
+        $user->setProfilepublic(true);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -90,13 +93,73 @@ class UserController extends Controller
     }
 
     /**
+     * Changes the users profile to Public/Private
+     * @param User $user
+     *
+     * @Route("/changePublic/{id}", name="user_change_public")
+     */
+    public function changePublicAction(User $user){
+        $em = $this->getDoctrine()->getManager();
+        $public = $user->getProfilepublic();
+        $user->setProfilepublic(!$public);
+        $em->persist($user);
+        $em->flush();
+        return $this->redirectToRoute('user_show', array('id'=>$user->getId()));
+    }
+    /**
      * Displays a form to edit an existing user entity.
      *
-     * @Route("/{id}/edit", name="user_edit")
+     * @Route("/{id}/edit/{type}", name="user_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, User $user)
+    public function editAction(Request $request, User $user, $type)
     {
+        $has_Permision = false;
+        //Check if user has permision to edit
+        if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')){
+            if($this->getUser() == $user || $this->get('security.authorization_checker')->isGranted('ROLE_MODERATOR')){
+                $has_Permision = true;
+            }
+        }
+
+        //Redirect user if not have permision
+        if (!$has_Permision){
+            $this->addFlash('notify',"You don't have the neccesary permisions to make changes to this account");
+            return $this->redirectToRoute('homepage');
+        }
+
+        $editForm = $this->createFormBuilder()->getForm();
+        $em = $this->getDoctrine()->getManager();
+        //if editing password
+        if ($type == 'password'){
+            $editForm->add('password',PasswordType::class,array('label'=>'Current Password'))
+                ->add('newpass1',PasswordType::class,array('label'=>'New Password'))
+                ->add('newpass2',PasswordType::class,array('label'=>'Confirm New Password'));
+            $editForm->handleRequest($request);
+
+            if ($editForm->isSubmitted() && $editForm->isValid()) {
+                $data = $editForm->getData();
+
+                //Check password is valid
+                if($this->get('security.password_encoder')->isPasswordValid($user, $data['password'])){
+                    if($data['newpass1'] == $data['newpass2']){
+                        $newpass = $this->get('security.password_encoder')->encodePassword($user, $data['newpass1']);
+                        $user->setPassword($newpass);
+                        $em->persist($user);
+                        $em->flush();
+                        $this->addFlash('notify',"Password changed succesfully");
+                    }else{
+                        $this->addFlash('notify', "Passwords do not match.");
+                    }
+                }else{
+                    $this->addFlash('notify', "The password is incorrect.");
+                }
+            }
+        }
+        else{
+            $this->addFlash('notify','An Error occured while trying to make an edit.');
+        }
+        /*
         $deleteForm = $this->createDeleteForm($user);
         $editForm = $this->createForm('AppBundle\Form\UserType', $user);
         $editForm->handleRequest($request);
@@ -105,12 +168,11 @@ class UserController extends Controller
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('user_edit', array('id' => $user->getId()));
-        }
+        }**/
 
         return $this->render('user/edit.html.twig', array(
             'user' => $user,
             'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 

@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 class DefaultController extends Controller
 {
     /**
+     * Loads the homepage
      * @Route("/", name="homepage")
      */
     public function indexAction(Request $request)

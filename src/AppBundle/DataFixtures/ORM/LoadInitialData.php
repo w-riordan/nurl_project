@@ -91,6 +91,7 @@ class LoadInitialData implements FixtureInterface, ContainerAwareInterface
             ->setPassword($newPass)
             ->setAbout($about)
             ->setFrozen(false)
+            ->setProfilepublic(true)
             ->setProfilepic(null)
             ->setJoindate(new \DateTime())
             ->setUsertype($type);

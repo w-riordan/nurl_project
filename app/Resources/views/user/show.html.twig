@@ -1,52 +1,31 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>User</h1>
+    <div class="details_div">
+    <h1>{{ user.username }}'s Profile</h1> <br>
+    <h2>Profile Pic</h2> {{ user.getProfileImage('large') | raw }}
+        {% if app.user == user or is_granted('ROLE_MODERATOR')%}
+        <a class="block_link" href="">Change Profile Pic</a>
+        {% endif %}<br>
+        {% if user.profilepublic or is_granted('ROLE_MODERATOR') or app.user == user %}
+        <h2>About me</h2> <p>{{ user.about }}</p>
+            {% if app.user == user or is_granted('ROLE_MODERATOR')%}
+                <a class="block_link" href="">Edit About Me</a>
+            {% endif %}<br>
+        <h2>Join Date</h2> <p>{{ user.joindate.format('Y-m-d H:i:s') }}</p>
+        {% else %}
+             <p class="warning_message">This users profile is private.</p>
+        {% endif %}
+    </div>
+            {% if app.user == user or is_granted('ROLE_MODERATOR') %}
 
-    <table>
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ user.id }}</td>
-            </tr>
-            <tr>
-                <th>Username</th>
-                <td>{{ user.username }}</td>
-            </tr>
-            <tr>
-                <th>Userpass</th>
-                <td>{{ user.password }}</td>
-            </tr>
-            <tr>
-                <th>Profilepic</th>
-                <td>{{ user.profilepic }}</td>
-            </tr>
-            <tr>
-                <th>About</th>
-                <td>{{ user.about }}</td>
-            </tr>
-            <tr>
-                <th>Joindate</th>
-                <td>{% if user.joindate %}{{ user.joindate|date('Y-m-d H:i:s') }}{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Frozen</th>
-                <td>{% if user.frozen %}Yes{% else %}No{% endif %}</td>
-            </tr>
-        </tbody>
-    </table>
+            <a class="block_link" href="{{ path('user_edit',{'id':user.id, 'type':'password'}) }}">Change Password</a>
 
-    <ul>
-        <li>
-            <a href="{{ path('user_index') }}">Back to the list</a>
-        </li>
-        <li>
-            <a href="{{ path('user_edit', { 'id': user.id }) }}">Edit</a>
-        </li>
-        <li>
+            <a class="block_link" href="{{ path('user_change_public', {'id':user.id}) }}">Make Profile {% if user.profilepublic %} private {% else %} public {% endif %}</a>
+
+            <p class="warning_message">Deleting your account can't be undone.</p>
             {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
+                <input class="block_link no_button" type="submit" value="Delete">
             {{ form_end(delete_form) }}
-        </li>
-    </ul>
+            {% endif %}
 {% endblock %}

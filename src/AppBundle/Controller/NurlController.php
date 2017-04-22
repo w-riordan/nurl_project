@@ -25,7 +25,7 @@ class NurlController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $nurls = $em->getRepository('AppBundle:Nurl')->findByFrozen(false,array('id'=>'desc'));
+        $nurls = $em->getRepository('AppBundle:Nurl')->findBy(array('frozen'=>false,'public'=>true),array('id'=>'desc'));
 
         return $this->render('nurl/index.html.twig', array(
             'nurls' => $nurls,
@@ -149,7 +149,6 @@ class NurlController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('nurl_delete', array('id' => $nurl->getId())))
             ->setMethod('DELETE')
-            ->getForm()
-        ;
+            ->getForm();
     }
 }
