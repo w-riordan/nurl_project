@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -155,6 +156,18 @@ class UserController extends Controller
                     $this->addFlash('notify', "The password is incorrect.");
                 }
             }
+        }else if($type=='about'){
+            $editForm->add('about',TextareaType::class, array('label' => 'About Me'));
+            $editForm->handleRequest($request);
+
+            if ($editForm->isSubmitted() && $editForm->isValid()) {
+                $data = $editForm->getData();
+                $user->setAbout($data['about']);
+                $em->persist($user);
+                $em->flush();
+                $this->addFlash('notify',"Updated Profile.");
+            }
+
         }
         else{
             $this->addFlash('notify','An Error occured while trying to make an edit.');

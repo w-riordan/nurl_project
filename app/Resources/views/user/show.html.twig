@@ -10,7 +10,7 @@
         {% if user.profilepublic or is_granted('ROLE_MODERATOR') or app.user == user %}
         <h2>About me</h2> <p>{{ user.about }}</p>
             {% if app.user == user or is_granted('ROLE_MODERATOR')%}
-                <a class="block_link" href="">Edit About Me</a>
+                <a class="block_link" href="{{ path('user_edit',{'id':user.id, 'type':'about'}) }}">Edit About Me</a>
             {% endif %}<br>
         <h2>Join Date</h2> <p>{{ user.joindate.format('Y-m-d H:i:s') }}</p>
         {% else %}
