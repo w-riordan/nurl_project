@@ -1,36 +1,19 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Collection</h1>
-
-    <table>
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ collection.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ collection.name }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ collection.description }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <ul>
-        <li>
-            <a href="{{ path('collection_index') }}">Back to the list</a>
-        </li>
-        <li>
-            <a href="{{ path('collection_edit', { 'id': collection.id }) }}">Edit</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+    <h1>Collection Details</h1>
+    <div class="details_div">
+        <h2>Title</h2> <p>{{ collection.name }}</p><br>
+        <h2>Description</h2><p>{{ collection.description }}</p><br>
+        <h2>Owner</h2><p><a class="block_link" href="{{ path('user_show',{'id':collection.owner.id}) }}">
+                {{ collection.owner.getProfileImage('medium') |raw}} {{ collection.owner.username }}
+            </a></p><br>
+    </div>
+    {% if app.user == collection.owner or is_granted('ROLE_MOD') %}
+    <a class="block_link" href="{{ path('collection_edit', { 'id': collection.id }) }}">Edit</a>
+    {{ form_start(delete_form) }}
+        <p class="warning_message">Deleting a Collection can not be undone and will delete all the nurls in the collection</p>
+        <input class="block_link no_button" type="submit" value="Delete">
+    {{ form_end(delete_form) }}
+    {% endif %}
 {% endblock %}

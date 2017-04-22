@@ -86,6 +86,15 @@ class CollectionController extends Controller
      */
     public function editAction(Request $request, Collection $collection)
     {
+        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            $this->addFlash('notify',"You don't have the required permisions.");
+            return $this->redirectToRoute('homepage');
+        }
+        if (!($this->getUser() == $collection->getOwner()) &&
+            !($this->get('security.authorization_checker')->isGranted('ROLE_MOD'))){
+            $this->addFlash('notify',"You don't have the required permisions.");
+            return $this->redirectToRoute('homepage');
+        }
         $deleteForm = $this->createDeleteForm($collection);
         $editForm = $this->createForm('AppBundle\Form\CollectionType', $collection);
         $editForm->handleRequest($request);
