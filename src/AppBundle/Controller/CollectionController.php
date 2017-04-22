@@ -39,7 +39,12 @@ class CollectionController extends Controller
      */
     public function newAction(Request $request)
     {
+        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            $this->addFlash('notify',"Only registered users can create collections");
+            $this->redirectToRoute('homepage');
+        }
         $collection = new Collection();
+        $collection->setOwner($this->getUser());
         $form = $this->createForm('AppBundle\Form\CollectionType', $collection);
         $form->handleRequest($request);
 
