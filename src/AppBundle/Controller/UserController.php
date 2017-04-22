@@ -6,8 +6,10 @@ use AppBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -60,10 +62,13 @@ class UserController extends Controller
             $user->setPassword($pass);
 
             $profilepic = $user->getProfilepic();
-            $filename = md5(uniqid()).'.'.$profilepic->guessExtension();
+            if (isset($profilepic)){
+                $filename = md5(uniqid()).'.'.$profilepic->guessExtension();
 
-            $profilepic->move($this->getParameter('profile_pics_dir'), $filename);
-            $user->setProfilepic($filename);
+                $profilepic->move($this->getParameter('profile_pics_dir'), $filename);
+                $user->setProfilepic($filename);
+            }
+
 
             $em->persist($user);
             $em->flush();
@@ -168,6 +173,24 @@ class UserController extends Controller
                 $this->addFlash('notify',"Updated Profile.");
             }
 
+        }else if($type=='pic'){
+            $editForm->add('pic',FileType::class,array('label'=>'Profile Picture'));
+            $editForm->handleRequest($request);
+
+            if ($editForm->isSubmitted() && $editForm->isValid()) {
+                $data = $editForm->getData();
+                $profilepic = $data['pic'];
+
+                $filename = md5(uniqid()).'.'.$profilepic->guessExtension();
+
+                $profilepic->move($this->getParameter('profile_pics_dir'), $filename);
+                $user->setProfilepic($filename);
+
+                $em->persist($user);
+                $em->flush();
+
+                $this->addFlash('notify',"Updated Profile Picture.");
+            }
         }
         else{
             $this->addFlash('notify','An Error occured while trying to make an edit.');

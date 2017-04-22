@@ -5,7 +5,7 @@
     <h1>{{ user.username }}'s Profile</h1> <br>
     <h2>Profile Pic</h2> {{ user.getProfileImage('large') | raw }}
         {% if app.user == user or is_granted('ROLE_MODERATOR')%}
-        <a class="block_link" href="">Change Profile Pic</a>
+        <a class="block_link" href="{{ path('user_edit', {'id':user.id, 'type':'pic'}) }}">Change Profile Pic</a>
         {% endif %}<br>
         {% if user.profilepublic or is_granted('ROLE_MODERATOR') or app.user == user %}
         <h2>About me</h2> <p>{{ user.about }}</p>
