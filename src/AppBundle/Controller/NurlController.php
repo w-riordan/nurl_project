@@ -41,12 +41,11 @@ class NurlController extends Controller
     public function newAction(Request $request)
     {
         $nurl = new Nurl();
-        $form = $this->createForm('AppBundle\Form\NurlType', $nurl);
+        $form = $this->createForm('AppBundle\Form\NurlType', $nurl,array('entity_manager'=>$this->get('doctrine.orm.entity_manager'), 'user' => $this->getUser()));
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-
             if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')){
                 $nurl->setFrozen(false)->setAuthor($this->get('security.token_storage')->getToken()->getUser());
 

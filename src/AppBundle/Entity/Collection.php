@@ -172,4 +172,9 @@ class Collection
     {
         return $this->nurls;
     }
+
+    function __toString()
+    {
+        return $this->name;
+    }
 }
