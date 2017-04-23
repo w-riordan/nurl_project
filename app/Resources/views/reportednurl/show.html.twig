@@ -3,38 +3,44 @@
 {% block body %}
     <h1>Reportednurl</h1>
 
-    <table>
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ reportedNurl.id }}</td>
-            </tr>
-            <tr>
-                <th>Accepted</th>
-                <td>{% if reportedNurl.accepted %}Yes{% else %}No{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Reason</th>
-                <td>{{ reportedNurl.reason }}</td>
-            </tr>
-            <tr>
-                <th>Timestamp</th>
-                <td>{% if reportedNurl.timestamp %}{{ reportedNurl.timestamp|date('Y-m-d H:i:s') }}{% endif %}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="nurl_div">
+        <h1>Title</h1>
+        <h1 class="nurl_content">{{ reportedNurl.nurl.title }}</h1>
+    </div>
+    <div class="nurl_div">
+        <h2>Tag</h2>
+        <a class="block_link" href="{{ path('tag_show', {'id':reportedNurl.nurl.tag.id}) }}">{{ reportedNurl.nurl.tag.name }}</a>
+    </div>
 
-    <ul>
-        <li>
-            <a href="{{ path('reportednurl_index') }}">Back to the list</a>
-        </li>
-        <li>
-            <a href="{{ path('reportednurl_edit', { 'id': reportedNurl.id }) }}">Edit</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+    {% if not(reportedNurl.nurl.collection is empty) %}
+        <div class="nurl_div">
+            <h2>Collection</h2>
+            <a class="block_link" href="{{ path('collection_show', {'id':reportedNurl.nurl.collection.id}) }}">{{ reportedNurl.nurl.collection.name }}</a>
+        </div>
+    {% endif %}
+
+    <div class="nurl_div">
+        <h2>Author</h2>
+        <a class="block_link" href="{{ path('user_show', {'id':reportedNurl.nurl.author.id}) }}">{{ reportedNurl.nurl.author.getProfileImage() | raw }} {{ reportedNurl.nurl.author.username }}</a>
+    </div>
+    <div  class="nurl_div">
+        <h2>Link</h2>
+        <a class="block_link" href="{{ reportedNurl.nurl.uRL | raw}}">URL</a>
+    </div>
+    <div class="nurl_div">
+        <h2>Notes</h2>
+        <p class="nurl_content text_back" >{{ reportedNurl.nurl.notes }}</p>
+    </div>
+    <div class="nurl_div">
+        <h2>Time</h2>
+        <p class="nurl_content text_back" >{{ reportedNurl.timestamp|date('Y-m-d H:i:s') }}</p>
+    </div>
+    <div class="nurl_div">
+        <h2>Reason</h2>
+        <p class="nurl_content text_back" >{{ reportedNurl.reason }}</p>
+    </div>
+    <a class="block_link" href="{{ path("report_accept", {'id':reportedNurl.id}) }}">Accept</a>
+    <a class="block_link" href="{{ path("report_reject", {'id':reportedNurl.id}) }}">Reject/Restore Nurl</a>
+    <a class="block_link" href="{{ path('reportednurl_index') }}">Back to the list</a>
+
 {% endblock %}

@@ -26,7 +26,7 @@ class ReportedNurlController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $reportedNurls = $em->getRepository('AppBundle:ReportedNurl')->findAll();
+        $reportedNurls = $em->getRepository('AppBundle:ReportedNurl')->findByAccepted(null);
 
         return $this->render('reportednurl/index.html.twig', array(
             'reportedNurls' => $reportedNurls,
@@ -78,6 +78,51 @@ class ReportedNurlController extends Controller
             'reportedNurl' => $reportedNurl,
             'delete_form' => $deleteForm->createView(),
         ));
+    }
+
+    /**
+     * Accept the report
+     * @param ReportedNurl $report_nurl
+     * @Route("/accept/{id}", name="report_accept")
+     */
+    public function acceptAction(ReportedNurl $report_nurl){
+        if (!$this->get('security.authorization_checker')->isGranted('ROLE_MOD')) {
+            $this->addFlash('notify',"You don't have the required permisions.");
+            return $this->redirectToRoute('homepage');
+        }
+
+        $report_nurl->setAccepted(true);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($report_nurl);
+        $em->flush();
+
+        $this->addFlash('notify',"The report has been accepted");
+        return $this->redirectToRoute('reportednurl_index');
+    }
+
+    /**
+     * Reject the report
+     * @param ReportedNurl $report_nurl
+     * @Route("/reject/{id}", name="report_reject")
+     */
+    public function rejectAction(ReportedNurl $report_nurl){
+        if (!$this->get('security.authorization_checker')->isGranted('ROLE_MOD')) {
+            $this->addFlash('notify',"You don't have the required permisions.");
+            return $this->redirectToRoute('homepage');
+        }
+
+        $report_nurl->setAccepted(false);
+        $nurl = $report_nurl->getNurl();
+        $nurl->setFrozen(false);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($report_nurl);
+        $em->persist($nurl);
+        $em->flush();
+
+        $this->addFlash('notify',"The nurl has been restored");
+        return $this->redirectToRoute('nurl_show',array('id'=>$nurl->getId()));
     }
 
     /**
