@@ -225,11 +225,16 @@ class UserController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $collections = $user->getCollections();
+            $nurls = $user->getNurls();
+            $em->remove($collections);
+            $em->remove($nurls);
             $em->remove($user);
             $em->flush();
         }
 
-        return $this->redirectToRoute('user_index');
+        $this->addFlash('notify',"The user account has been deleted");
+        return $this->redirectToRoute('homepage');
     }
 
     /**
