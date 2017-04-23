@@ -22,9 +22,13 @@ class PendingNurlController extends Controller
      */
     public function indexAction()
     {
+        if (!$this->get('security.authorization_checker')->isGranted('ROLE_MOD')) {
+            $this->addFlash('notify',"You don't have the required permisions.");
+            return $this->redirectToRoute('homepage');
+        }
         $em = $this->getDoctrine()->getManager();
 
-        $pendingNurls = $em->getRepository('AppBundle:PendingNurl')->findAll();
+        $pendingNurls = $em->getRepository('AppBundle:PendingNurl')->findByAccepted(null);
 
         return $this->render('pendingnurl/index.html.twig', array(
             'pendingNurls' => $pendingNurls,
@@ -65,6 +69,10 @@ class PendingNurlController extends Controller
      */
     public function showAction(PendingNurl $pendingNurl)
     {
+        if (!$this->get('security.authorization_checker')->isGranted('ROLE_MOD')) {
+            $this->addFlash('notify',"You don't have the required permisions.");
+            return $this->redirectToRoute('homepage');
+        }
         $deleteForm = $this->createDeleteForm($pendingNurl);
 
         return $this->render('pendingnurl/show.html.twig', array(

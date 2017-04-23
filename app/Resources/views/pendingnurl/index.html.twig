@@ -1,43 +1,19 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Pendingnurls list</h1>
+    <h1>Pending Nurls</h1>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Accepted</th>
-                <th>Reason</th>
-                <th>Timestamp</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for pendingNurl in pendingNurls %}
-            <tr>
-                <td><a href="{{ path('pendingnurl_show', { 'id': pendingNurl.id }) }}">{{ pendingNurl.id }}</a></td>
-                <td>{% if pendingNurl.accepted %}Yes{% else %}No{% endif %}</td>
-                <td>{{ pendingNurl.reason }}</td>
-                <td>{% if pendingNurl.timestamp %}{{ pendingNurl.timestamp|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('pendingnurl_show', { 'id': pendingNurl.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('pendingnurl_edit', { 'id': pendingNurl.id }) }}">edit</a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
+        {% for pend in pendingNurls %}
+            <div class="nurl_summary">
+                <a class="block_link" href="{{ path('pendingnurl_show', {'id':pend.id}) }}">
+                    {{ pend.nurl.title }}
+                </a>
+                <div>
+                    <p>
+                        {{ pend.nurl.notes }}
+                    </p>
+                </div>
+                <a class="block_link" href="http://{{ pend.nurl.url }}">Link</a>
+            </div>
         {% endfor %}
-        </tbody>
-    </table>
-
-    <ul>
-        <li>
-            <a href="{{ path('pendingnurl_new') }}">Create a new pendingNurl</a>
-        </li>
-    </ul>
 {% endblock %}
