@@ -9,6 +9,14 @@
         <h2>Tag</h2>
         <a class="block_link" href="{{ path('tag_show', {'id':nurl.tag.id}) }}">{{ nurl.tag.name }}</a>
     </div>
+
+    {% if not(nurl.collection is empty) %}
+        <div class="nurl_div">
+            <h2>Collection</h2>
+            <a class="block_link" href="{{ path('collection_show', {'id':nurl.collection.id}) }}">{{ nurl.collection.name }}</a>
+        </div>
+    {% endif %}
+
     <div class="nurl_div">
         <h2>Author</h2>
         <a class="block_link" href="{{ path('user_show', {'id':nurl.author.id}) }}">{{ nurl.author.getProfileImage() | raw }} {{ nurl.author.username }}</a>
