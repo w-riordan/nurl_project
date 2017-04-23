@@ -5,7 +5,10 @@
         <h1>Title</h1>
         <h1 class="nurl_content">{{ nurl.title }}</h1>
     </div>
-
+    <div class="nurl_div">
+        <h2>Tag</h2>
+        <a class="block_link" href="{{ path('tag_show', {'id':nurl.tag.id}) }}">{{ nurl.tag.name }}</a>
+    </div>
     <div class="nurl_div">
         <h2>Author</h2>
         <a class="block_link" href="{{ path('user_show', {'id':nurl.author.id}) }}">{{ nurl.author.getProfileImage() | raw }} {{ nurl.author.username }}</a>

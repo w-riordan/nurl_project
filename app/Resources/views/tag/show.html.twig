@@ -1,36 +1,34 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Tag</h1>
+    <h1>Tag - {{ tag.name }}</h1>
 
-    <table>
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ tag.id }}</td>
-            </tr>
-            <tr>
-                <th>Rating</th>
-                <td>{{ tag.rating }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ tag.name }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <ul>
-        <li>
-            <a href="{{ path('tag_index') }}">Back to the list</a>
-        </li>
-        <li>
-            <a href="{{ path('tag_edit', { 'id': tag.id }) }}">Edit</a>
-        </li>
-        <li>
+    <a class="block_link" href="{{ path('tag_index') }}">Back to Tags</a>
+    {% if is_granted('ROLE_MOD') %}
+            <a class="block_link" href="{{ path('tag_edit', { 'id': tag.id }) }}">Edit</a>
             {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
+                <input class="block_link no_button" type="submit" value="Delete">
             {{ form_end(delete_form) }}
-        </li>
-    </ul>
+    {% endif %}
+
+    <h1>Nurls</h1>
+    {% if not(tag.nurls is empty) %}
+        {% for nurl in tag.nurls %}
+            {% if nurl.public or nurl.author == app.user %}
+                <div class="nurl_summary">
+                    <a class="block_link" href="{{ path('nurl_show', {'id':nurl.id}) }}">
+                        {{ nurl.title }}
+                    </a>
+                    <div>
+                        <p>
+                            {{ nurl.notes }}
+                        </p>
+                    </div>
+                    <a class="block_link" href="{{ nurl.url }}">Link</a>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <p class="tag">Their are currently no nurls to display</p>
+    {% endif %}
 {% endblock %}

@@ -16,4 +16,25 @@
         <input class="block_link no_button" type="submit" value="Delete">
     {{ form_end(delete_form) }}
     {% endif %}
+
+    <h1>Nurls</h1>
+    {% if not(collection.nurls is empty) %}
+        {% for nurl in collection.nurls %}
+            {% if nurl.public or nurl.author == app.user %}
+                <div class="nurl_summary">
+                    <a class="block_link" href="{{ path('nurl_show', {'id':nurl.id}) }}">
+                        {{ nurl.title }}
+                    </a>
+                    <div>
+                        <p>
+                            {{ nurl.notes }}
+                        </p>
+                    </div>
+                    <a class="block_link" href="{{ nurl.url }}">Link</a>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <p class="tag">Their are currently no nurls to display</p>
+    {% endif %}
 {% endblock %}
