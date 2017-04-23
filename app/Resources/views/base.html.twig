@@ -26,6 +26,9 @@
 
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                 <li>
+                    <a href="{{ path('nurl_search') }}">Search Nurls</a>
+                </li>
+                <li>
                     <a href="{{ path('logout') }}">Logout</a>
                 </li>
                 <li>

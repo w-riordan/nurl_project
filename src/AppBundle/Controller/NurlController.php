@@ -4,9 +4,13 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Nurl;
 use AppBundle\Entity\PendingNurl;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Nurl controller.
@@ -31,6 +35,51 @@ class NurlController extends Controller
             'nurls' => $nurls,
         ));
     }
+
+    /**
+     * Creates a new nurl entity.
+     *
+     * @Route("/search", name="nurl_search")
+     * @Method({"GET", "POST"})
+     */
+    public function searchAction(Request $request)
+    {
+        $submitted = false;
+        $form = $this->createFormBuilder()->getForm();
+        $form->add('search_words',TextType::class,array(
+            'label'=>'search',
+            'required'=>false
+        ))->add('tags',EntityType::class,array(
+            'class'=>'AppBundle:Tag',
+            'label'=>'Tag',
+            'multiple'=> true,
+        ))->add('submit', SubmitType::class,array(
+            'label'=>'Search'
+        ));
+        $nurls=null;
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()){
+            $submitted=true;
+            $data = $form->getData();
+            $em = $this->getDoctrine()->getManager();
+            $query = $em->createQuery(
+                'SELECT n FROM AppBundle:Nurl n WHERE n.tag  in(:tags)  ORDER BY n.id DESC'
+            )->setParameter('tags', $data['tags']);//->setParameter('search', $data['search_words']);
+            if ($data['search_words'] != ""){
+                $query = $em->createQuery(
+                    'SELECT n FROM AppBundle:Nurl n WHERE n.tag  in(:tags) AND (n.title LIKE :search OR n.notes LIKE :search)  ORDER BY n.id DESC'
+                )->setParameter('tags', $data['tags'])->setParameter('search', '%'.$data['search_words'].'%');
+            }
+            $nurls = $query->getResult();
+        }
+    //
+        return $this->render('nurl/search.html.twig', array(
+            'nurls' => $nurls,
+            'search_form' => $form->createView(),
+            'submitted' => $submitted
+        ));
+    }
+
 
     /**
      * Creates a new nurl entity.

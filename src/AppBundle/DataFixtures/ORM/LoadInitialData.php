@@ -43,6 +43,7 @@ class LoadInitialData implements FixtureInterface, ContainerAwareInterface
         //Create Users
         $about = "This user represents all unregistered users";
         $anonUser = $this->createUser("Anonymous","thisusershouldnotbeloggedin",$about,$standUserType);
+        $anonUser->setFrozen(true);
         $about = "I am the site admistrator.";
         $adminUser = $this->createUser("admin","admin",$about,$adminUserType);
         $about = "I am a moderator.";
