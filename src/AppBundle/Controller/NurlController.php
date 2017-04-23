@@ -54,7 +54,7 @@ class NurlController extends Controller
             }
 
             if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')){
-                $nurl->setFrozen(false)->setAuthor($this->get('security.token_storage')->getToken()->getUser());
+                $nurl->setFrozen(false)->setAuthor($this->getUser());
 
                 $em->persist($nurl);
                 $em->flush();

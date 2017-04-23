@@ -1,0 +1,8 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<h1>Freeze User Form</h1>
+    {{ form_start(ban_form) }}
+        {{ form_widget(ban_form) }}
+    <input class="submit" type="submit" value="Freeze User">
+    {{ form_end(ban_form) }}
+{% endblock %}

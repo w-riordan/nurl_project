@@ -3,11 +3,14 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
+use AppBundle\Entity\UserBan;
+use Doctrine\DBAL\Types\TextType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
@@ -105,6 +108,18 @@ class UserController extends Controller
      * @Route("/changePublic/{id}", name="user_change_public")
      */
     public function changePublicAction(User $user){
+        $has_Permision=false;
+        if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')){
+            if($this->getUser() == $user || $this->get('security.authorization_checker')->isGranted('ROLE_MODERATOR')){
+                $has_Permision = true;
+            }
+        }
+
+        //Redirect user if not have permision
+        if (!$has_Permision){
+            $this->addFlash('notify',"You don't have the neccesary permisions to make changes to this account");
+            return $this->redirectToRoute('homepage');
+        }
         $em = $this->getDoctrine()->getManager();
         $public = $user->getProfilepublic();
         $user->setProfilepublic(!$public);
@@ -195,21 +210,56 @@ class UserController extends Controller
         else{
             $this->addFlash('notify','An Error occured while trying to make an edit.');
         }
-        /*
-        $deleteForm = $this->createDeleteForm($user);
-        $editForm = $this->createForm('AppBundle\Form\UserType', $user);
-        $editForm->handleRequest($request);
-
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('user_edit', array('id' => $user->getId()));
-        }**/
 
         return $this->render('user/edit.html.twig', array(
             'user' => $user,
             'edit_form' => $editForm->createView(),
         ));
+    }
+
+    /**
+     * Freeze or unfreeze a user
+     * @param User $user
+     * @Route("freeze/{id}",name="user_freeze")
+     * @Method({"GET","POST"})
+     */
+    public function freezeAction(Request $request,User $user){
+        if(!$this->get('security.authorization_checker')->isGranted('ROLE_MOD')){
+           $this->addFlash('notufy', "You don't have the required permissions to complete this action");
+           return $this->redirectToRoute('homepage');
+        }
+        $em = $this->getDoctrine()->getManager();
+        if ($user->getFrozen()){
+            $this->addFlash('notify',"The account has been unfrozen.");
+            $user->setFrozen(false);
+            $ban = $em->getRepository("AppBundle:UserBan")->findOneByUser($user);
+            $em->remove($ban);
+        }else{
+            $banForm = $this->createFormBuilder()->getForm();
+
+            $banForm->add('reason',TextareaType::class,array('label' => 'Reason For Freeze','required'=>true));
+
+            $banForm->handleRequest($request);
+            if($banForm->isSubmitted() && $banForm->isValid()){
+                $this->addFlash('notify',"The account has been frozen.");
+                $user->setFrozen(true);
+                $ban = new UserBan();
+                $data=$banForm->getData();
+                $ban->setUser($user)->setTimestamp(new \DateTime())->setReason($data['reason']);
+                $em->persist($ban);
+            }else{
+                return $this->render('user/ban.html.twig', array(
+                    'user' => $user,
+                    'ban_form' => $banForm->createView(),
+                ));
+            }
+
+
+        }
+
+        $em->persist($user);
+        $em->flush();
+        return $this->redirectToRoute('user_show', array('id'=>$user->getId()));
     }
 
     /**

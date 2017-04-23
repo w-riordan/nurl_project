@@ -24,7 +24,15 @@ class SecurityController extends Controller
         $error = $authenticationUtils->getLastAuthenticationError();
 
         $lastUsername = $authenticationUtils->getLastUsername();
-
+        $banned = null;
+        if (isset($lastUsername)){
+            $user = $this->getDoctrine()->getManager()->getRepository("AppBundle:User")->findOneByUsername($lastUsername);
+            $userban = $this->getDoctrine()->getManager()->getRepository("AppBundle:UserBan")->findOneByUser($user);
+           if (isset($userban)) {
+                $this->addFlash('notify',"Your account was frozen on ". $userban->getTimestamp()->format('d-m-Y')
+                . " for the following reason :" . $userban->getReason() . "!");
+           }
+        }
         $templateName = 'security/login';
         $argsArray = [
             'last_username' => $lastUsername,

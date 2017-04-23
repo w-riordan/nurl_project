@@ -3,13 +3,14 @@
 {% block body %}
     <div class="details_div">
     <h1>{{ user.username }}'s Profile</h1> <br>
+
     <h2>Profile Pic</h2> {{ user.getProfileImage('large') | raw }}
-        {% if app.user == user or is_granted('ROLE_MOD')%}
+        {% if app.user == user %}
         <a class="block_link" href="{{ path('user_edit', {'id':user.id, 'type':'pic'}) }}">Change Profile Pic</a>
         {% endif %}<br>
         {% if user.profilepublic or is_granted('ROLE_MOD') or app.user == user %}
         <h2>About me</h2> <p>{{ user.about }}</p>
-            {% if app.user == user or is_granted('ROLE_MOD')%}
+            {% if app.user == user %}
                 <a class="block_link" href="{{ path('user_edit',{'id':user.id, 'type':'about'}) }}">Edit About Me</a>
             {% endif %}<br>
         <h2>Join Date</h2> <p>{{ user.joindate.format('Y-m-d H:i:s') }}</p>
@@ -17,7 +18,7 @@
              <p class="warning_message">This users profile is private.</p>
         {% endif %}
     </div>
-            {% if app.user == user or is_granted('ROLE_MOD') %}
+            {% if app.user == user %}
 
             <a class="block_link" href="{{ path('user_edit',{'id':user.id, 'type':'password'}) }}">Change Password</a>
 
@@ -49,7 +50,7 @@
 
     <h1>{{ username }} Public Nurls</h1>
     {% if app.user == user %}<a class="block_link" href="{{ path('nurl_new') }}">Create New Nurl</a>{% endif %}
-        {% if not(user.collections is empty)%}
+        {% if not(user.nurls is empty)%}
             {% for nurl in user.nurls %}
                 {% if nurl.public %}
                 <div class="nurl_summary">
@@ -72,7 +73,7 @@
     {% if app.user == user or is_granted('ROLE_MOD') %}
         <h1>{{ username }} Private Nurls</h1>
         {% if app.user == user %}<a class="block_link" href="{{ path('nurl_new') }}">Create New Nurl</a>{% endif %}
-        {% if not(user.collections is empty)%}
+        {% if not(user.nurls is empty)%}
             {% for nurl in user.nurls %}
                 {% if not(nurl.public) %}
                     <div class="nurl_summary">
@@ -91,6 +92,10 @@
         {% else %}
             <p class="tag">There are no Nurls to display.</p>
         {% endif %}
+    {% endif %}
+
+    {% if is_granted('ROLE_MOD') %}
+        <a class="block_link" href="{{ path('user_freeze', {'id':user.id}) }}">{% if user.frozen %}Un-{% endif %}Freeze User</a>
     {% endif %}
 
 {% endblock %}
