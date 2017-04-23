@@ -19,6 +19,11 @@
                 <li><a href="{{ path('homepage') }}">Homepage</a></li>
                 <li><a href="{{ path('nurl_index') }}">Nurls</a></li>
                 <li><a href="{{ path('tag_index') }}">Tags</a></li>
+                {% if is_granted('ROLE_MOD') %}
+                    <li><a href="{{ path('reportednurl_index') }}">Reports</a></li>
+                    <li><a href="{{ path('pendingnurl_index') }}">Pending</a></li>
+                {% endif %}
+
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                 <li>
                     <a href="{{ path('logout') }}">Logout</a>
