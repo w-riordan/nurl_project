@@ -12,7 +12,7 @@
     </div>
     <div  class="nurl_div">
         <h2>Link</h2>
-        <a class="block_link" href="http://{{ nurl.uRL }}">URL</a>
+        <a class="block_link" href="{{ nurl.uRL | raw}}">URL</a>
     </div>
     <div class="nurl_div">
         <h2>Notes</h2>
@@ -21,10 +21,15 @@
     <a class="block_link" href="{{ path('reportednurl_new', {'id':nurl.id}) }}">Report</a>
         {% if is_granted('ROLE_ADMIN') or (is_granted('IS_AUTHENTICATED_FULLY') and app.user == nurl.author)%}
             <a class ="block_link" href="{{ path('nurl_edit', { 'id': nurl.id }) }}">Edit</a>
+            {% if not(nurl.public) %}
+                <p class="warning_message">Making a Nurl public is permanent</p>
+                <a class="block_link" href="{{ path('nurl_public', {'id':nurl.id}) }}">Make Public</a>
+            {% endif %}
             {{ form_start(delete_form) }}
+            <p class="warning_message"> Deleting a nurl is permenant</p>
             <input class="block_link no_button" type="submit" value="Delete">
             {{ form_end(delete_form) }}
         {% endif %}
-    <a class="block_link" href="{{ path('nurl_index') }}">Back to the list</a>
+    <a class="block_link" href="{{ path('nurl_index') }}">Back to the Nurls</a>
     </ul>
 {% endblock %}

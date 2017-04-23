@@ -46,6 +46,13 @@ class NurlController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+
+            //Validate Url
+            $url=$nurl->getURL();
+            if (strpos($url,'http://')!=0 && strpos($url,'https://')!=0){
+                $nurl->setURL('http://' . $url);
+            }
+
             if($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')){
                 $nurl->setFrozen(false)->setAuthor($this->get('security.token_storage')->getToken()->getUser());
 
@@ -99,14 +106,35 @@ class NurlController extends Controller
      */
     public function editAction(Request $request, Nurl $nurl)
     {
+        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            $this->addFlash('notify',"You don't have the required permisions.");
+            return $this->redirectToRoute('homepage');
+        }
+        if (!($this->getUser() == $nurl->getAuthor()) &&
+            !($this->get('security.authorization_checker')->isGranted('ROLE_MOD'))) {
+            $this->addFlash('notify',"You don't have the required permisions.");
+            return $this->redirectToRoute('homepage');
+        }
+
         $deleteForm = $this->createDeleteForm($nurl);
-        $editForm = $this->createForm('AppBundle\Form\NurlType', $nurl);
+        $editForm = $this->createForm('AppBundle\Form\NurlType', $nurl,array(
+            'entity_manager'=> $this->get('doctrine.orm.entity_manager'),
+            'user'=> $this->getUser(),
+            'show_public'=> false
+        ));
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('nurl_edit', array('id' => $nurl->getId()));
+            //Validate Url
+            $url=$nurl->getURL();
+            if (strpos($url,'http://')!=0 && strpos($url,'https://')!=0){
+                $nurl->setURL('http://' . $url);
+            }
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($nurl);
+            $em->flush();
+            $this->addFlash('notify',"Updated Succesfully");
+            return $this->redirectToRoute('nurl_show', array('id' => $nurl->getId()));
         }
 
         return $this->render('nurl/edit.html.twig', array(
@@ -114,6 +142,29 @@ class NurlController extends Controller
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
+    }
+
+    /**
+     * Makes the nurl public
+     * @param Nurl $nurl
+     * @Route("/makepublic/{id}", name="nurl_public")
+     */
+    public function makePublicAction(Nurl $nurl){
+        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            $this->addFlash('notify',"You don't have the required permisions.");
+            return $this->redirectToRoute('homepage');
+        }
+        if (!($this->getUser() == $nurl->getAuthor()) &&
+            !($this->get('security.authorization_checker')->isGranted('ROLE_MOD'))) {
+            $this->addFlash('notify',"You don't have the required permisions.");
+            return $this->redirectToRoute('homepage');
+        }
+        $em = $this->getDoctrine()->getManager();
+        $nurl->setPublic(true);
+        $em->persist($nurl);
+        $em->flush();
+        return $this->redirectToRoute('nurl_show', array('id'=>$nurl->getId()));
+
     }
 
     /**

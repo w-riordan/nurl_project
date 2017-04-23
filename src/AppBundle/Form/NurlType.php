@@ -19,7 +19,11 @@ class NurlType extends AbstractType
         $em =$options['entity_manager'];
         $user= $options['user'];
         $collections= $em->getRepository("AppBundle:Collection")->findByOwner($user);
-        $builder->add('title')->add('uRL')->add('notes')->add('public')->add('tag')->add('collection',EntityType::class,array(
+        $builder->add('title')->add('uRL')->add('notes');
+        if ($options['show_public']){
+            $builder->add('public');
+        }
+        $builder->add('tag')->add('collection',EntityType::class,array(
             'class' => 'AppBundle:Collection',
             'choices' => $collections,
             'placeholder' => 'None',
@@ -37,6 +41,7 @@ class NurlType extends AbstractType
         $resolver->setRequired('user');
         $resolver->setDefaults(array(
             'data_class' => 'AppBundle\Entity\Nurl',
+            'show_public' => true,
         ));
     }
 
