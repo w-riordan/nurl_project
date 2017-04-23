@@ -23,7 +23,12 @@ class NurlType extends AbstractType
         if ($options['show_public']){
             $builder->add('public');
         }
-        $builder->add('tag')->add('collection',EntityType::class,array(
+        $builder->add('tag', EntityType::class,array(
+            'class' => 'AppBundle:Tag',
+            'required' => true,
+            'placeholder' => 'Choose A Tag'
+        ))
+            ->add('collection',EntityType::class,array(
             'class' => 'AppBundle:Collection',
             'choices' => $collections,
             'placeholder' => 'None',

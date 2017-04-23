@@ -2,6 +2,7 @@
 {% block tilte %}Recent Nurls{% endblock %}
 {% block body %}
     <h1>Nurls list</h1>
+    <a class="block_link" href="{{ path('nurl_new') }}">New Nurl</a>
 
     {% for nurl in nurls %}
         <div class="nurl_summary">
@@ -16,10 +17,4 @@
             <a class="block_link" href="http://{{ nurl.url }}">Link</a>
         </div>
     {% endfor %}
-
-    <ul>
-        <li>
-            <a href="{{ path('nurl_new') }}">Create a new nurl</a>
-        </li>
-    </ul>
 {% endblock %}
