@@ -50,9 +50,10 @@
 
     <h1>{{ username }} Public Nurls</h1>
     {% if app.user == user %}<a class="block_link" href="{{ path('nurl_new') }}">Create New Nurl</a>{% endif %}
-        {% if not(user.nurls is empty)%}
+        {% set publicCount = 0%}
             {% for nurl in user.nurls %}
                 {% if nurl.public %}
+                    {% set publicCount = publicCount + 1 %}
                 <div class="nurl_summary">
                     <a class="block_link" href="{{ path('nurl_show', {'id':nurl.id}) }}">
                         {{ nurl.title }}
@@ -66,16 +67,17 @@
                 </div>
                 {% endif %}
             {% endfor %}
-        {% else %}
+        {% if publicCount == 0 %}
             <p class="tag">There are no Nurls to display.</p>
         {% endif %}
 
     {% if app.user == user or is_granted('ROLE_MOD') %}
         <h1>{{ username }} Private Nurls</h1>
         {% if app.user == user %}<a class="block_link" href="{{ path('nurl_new') }}">Create New Nurl</a>{% endif %}
-        {% if not(user.nurls is empty)%}
+        {% set privateCount = 0 %}
             {% for nurl in user.nurls %}
                 {% if not(nurl.public) %}
+                    {% set privateCount = privateCount + 1 %}
                     <div class="nurl_summary">
                         <a class="block_link" href="{{ path('nurl_show', {'id':nurl.id}) }}">
                             {{ nurl.title }}
@@ -89,7 +91,7 @@
                     </div>
                 {% endif %}
             {% endfor %}
-        {% else %}
+        {% if privateCount == 0 %}
             <p class="tag">There are no Nurls to display.</p>
         {% endif %}
     {% endif %}
