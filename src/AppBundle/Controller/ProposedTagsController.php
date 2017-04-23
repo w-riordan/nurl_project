@@ -2,7 +2,9 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Nurl;
 use AppBundle\Entity\ProposedTags;
+use AppBundle\Entity\Tag;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
@@ -136,6 +138,28 @@ class ProposedTagsController extends Controller
     }
 
     /**
+     * @param ProposedTags $proposed
+     * @Route("/accept/{id}",name="proposed_accept")
+     */
+    public function acceptAction(ProposedTags $proposed){
+        if (!$this->get('security.authorization_checker')->isGranted('ROLE_MOD')) {
+            $this->addFlash('notify',"You don't have the required permisions.");
+            return $this->redirectToRoute('homepage');
+        }
+
+        $tag = new Tag();
+        $tag->setName($proposed->getName())->setRating($proposed->getRating());
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($tag);
+        $em->remove($proposed);
+        $em->flush();
+
+        $this->addFlash('notify', 'The Tag has been accepted.');
+        return $this->redirectToRoute('tag_show',array('id'=>$tag->getId()));
+
+    }
+
+    /**
      * Deletes a proposedTag entity.
      *
      * @Route("/{id}", name="proposedtags_delete")
@@ -152,7 +176,8 @@ class ProposedTagsController extends Controller
             $em->flush();
         }
 
-        return $this->redirectToRoute('proposedtags_index');
+        $this->addFlash('notify',"The Tag has been rejected");
+        return $this->redirectToRoute('tag_index');
     }
 
     /**

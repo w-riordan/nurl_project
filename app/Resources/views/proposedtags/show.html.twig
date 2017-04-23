@@ -1,36 +1,14 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Proposed Tag</h1>
+    <h1>Proposed Tag - {{ proposedTag.name }}</h1>
 
-    <table>
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ proposedTag.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ proposedTag.name }}</td>
-            </tr>
-            <tr>
-                <th>Rating</th>
-                <td>{{ proposedTag.rating }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <a class="block_link" href="{{ path('tag_index') }}">Back to Tags</a>
+    {% if is_granted('ROLE_MOD') %}
+        <a class="block_link" href="{{ path('proposed_accept', { 'id': proposedTag.id }) }}">Accept</a>
+        {{ form_start(delete_form) }}
+        <input class="block_link no_button" type="submit" value="Reject">
+        {{ form_end(delete_form) }}
+    {% endif %}
 
-    <ul>
-        <li>
-            <a href="{{ path('tag_index') }}">Back to the list</a>
-        </li>
-        <li>
-            <a href="{{ path('proposedtags_edit', { 'id': proposedTag.id }) }}">Edit</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input class="submit" type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
 {% endblock %}
