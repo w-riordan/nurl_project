@@ -182,6 +182,7 @@ class NurlController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->remove($nurl);
             $em->flush();
+            $this->addFlash('notify',"The nurl has been deleted");
         }
 
         return $this->redirectToRoute('nurl_index');

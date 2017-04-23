@@ -125,11 +125,15 @@ class CollectionController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+                foreach ($collection->getNurls() as $nurl) {
+                    $em->remove($nurl);
+                }
             $em->remove($collection);
             $em->flush();
+            $this->addFlash('notify', 'The collection has been deleted');
         }
 
-        return $this->redirectToRoute('collection_index');
+        return $this->redirectToRoute('user_show', array('id'=>$collection->getOwner()->getId()));
     }
 
     /**

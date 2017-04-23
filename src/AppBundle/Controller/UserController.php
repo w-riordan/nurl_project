@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * User controller.
@@ -270,6 +271,7 @@ class UserController extends Controller
      */
     public function deleteAction(Request $request, User $user)
     {
+        $session = new Session();
         $form = $this->createDeleteForm($user);
         $form->handleRequest($request);
 
@@ -277,14 +279,20 @@ class UserController extends Controller
             $em = $this->getDoctrine()->getManager();
             $collections = $user->getCollections();
             $nurls = $user->getNurls();
-            $em->remove($collections);
-            $em->remove($nurls);
+            foreach ($collections as $collection){
+                $em->remove($collection);
+            }
+            foreach ($nurls as $nurl){
+                $em->remove($nurl);
+            }
             $em->remove($user);
             $em->flush();
+            $this->get('security.token_storage')->setToken(null);
+            $session->invalidate();
         }
 
         $this->addFlash('notify',"The user account has been deleted");
-        return $this->redirectToRoute('homepage');
+        return $this->redirectToRoute('logout');
     }
 
     /**
