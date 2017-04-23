@@ -82,6 +82,53 @@ class PendingNurlController extends Controller
     }
 
     /**
+     * Accept the pending nurl
+     * @param PendingNurl $pend_nurl
+     * @Route("/accept/{id}", name="pending_accept")
+     */
+    public function acceptAction(PendingNurl $pend_nurl){
+        if (!$this->get('security.authorization_checker')->isGranted('ROLE_MOD')) {
+            $this->addFlash('notify',"You don't have the required permisions.");
+            return $this->redirectToRoute('homepage');
+        }
+
+        $pend_nurl->setAccepted(true);
+        $pend_nurl->setTimestamp(new \DateTime());
+        $nurl=$pend_nurl->getNurl();
+        $nurl->setFrozen(false);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($pend_nurl);
+        $em->persist($nurl);
+        $em->flush();
+
+        $this->addFlash('notify',"The nurl has been accepted");
+        return $this->redirectToRoute('nurl_show',array('id'=>$nurl->getId()));
+    }
+
+    /**
+     * Reject the pending nurl
+     * @param PendingNurl $pend_nurl
+     * @Route("/reject/{id}", name="pending_reject")
+     */
+    public function rejectAction(PendingNurl $pend_nurl){
+        if (!$this->get('security.authorization_checker')->isGranted('ROLE_MOD')) {
+            $this->addFlash('notify',"You don't have the required permisions.");
+            return $this->redirectToRoute('homepage');
+        }
+
+        $pend_nurl->setAccepted(false);
+        $pend_nurl->setTimestamp(new \DateTime());
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($pend_nurl);
+        $em->flush();
+
+        $this->addFlash('notify',"The nurl has been rejected");
+        return $this->redirectToRoute('pendingnurl_index');
+    }
+
+    /**
      * Displays a form to edit an existing pendingNurl entity.
      *
      * @Route("/{id}/edit", name="pendingnurl_edit")

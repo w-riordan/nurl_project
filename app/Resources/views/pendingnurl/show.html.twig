@@ -1,40 +1,38 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Pendingnurl</h1>
+    <h1>Pending Nurl</h1>
 
-    <table>
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ pendingNurl.id }}</td>
-            </tr>
-            <tr>
-                <th>Accepted</th>
-                <td>{% if pendingNurl.accepted %}Yes{% else %}No{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Reason</th>
-                <td>{{ pendingNurl.reason }}</td>
-            </tr>
-            <tr>
-                <th>Timestamp</th>
-                <td>{% if pendingNurl.timestamp %}{{ pendingNurl.timestamp|date('Y-m-d H:i:s') }}{% endif %}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="nurl_div">
+        <h1>Title</h1>
+        <h1 class="nurl_content">{{ pendingNurl.nurl.title }}</h1>
+    </div>
+    <div class="nurl_div">
+        <h2>Tag</h2>
+        <a class="block_link" href="{{ path('tag_show', {'id':pendingNurl.nurl.tag.id}) }}">{{ pendingNurl.nurl.tag.name }}</a>
+    </div>
 
-    <ul>
-        <li>
-            <a href="{{ path('pendingnurl_index') }}">Back to the list</a>
-        </li>
-        <li>
-            <a href="{{ path('pendingnurl_edit', { 'id': pendingNurl.id }) }}">Edit</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+    {% if not(pendingNurl.nurl.collection is empty) %}
+        <div class="nurl_div">
+            <h2>Collection</h2>
+            <a class="block_link" href="{{ path('collection_show', {'id':pendingNurl.nurl.collection.id}) }}">{{ pendingNurl.nurl.collection.name }}</a>
+        </div>
+    {% endif %}
+
+    <div class="nurl_div">
+        <h2>Author</h2>
+        <a class="block_link" href="{{ path('user_show', {'id':pendingNurl.nurl.author.id}) }}">{{ pendingNurl.nurl.author.getProfileImage() | raw }} {{ pendingNurl.nurl.author.username }}</a>
+    </div>
+    <div  class="nurl_div">
+        <h2>Link</h2>
+        <a class="block_link" href="{{ pendingNurl.nurl.uRL | raw}}">URL</a>
+    </div>
+    <div class="nurl_div">
+        <h2>Notes</h2>
+        <p class="nurl_content text_back" >{{ pendingNurl.nurl.notes }}</p>
+    </div>
+    <a class="block_link" href="{{ path("pending_accept", {'id':pendingNurl.id}) }}">Accept</a>
+    <a class="block_link" href="{{ path("pending_reject", {'id':pendingNurl.id}) }}">Reject</a>
+    <a class="block_link" href="{{ path('pendingnurl_index') }}">Back to the list</a>
+
 {% endblock %}
